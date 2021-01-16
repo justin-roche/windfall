@@ -50,6 +50,7 @@
     ],
     "react/prop-types": "warn",
     "no-underscore-dangle": "warn",
+    "no-undef": false,
     "import/prefer-default-export": "off",
     "import/no-cycle": "off",
     "import/no-unresolved": "off",
