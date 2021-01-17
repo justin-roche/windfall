@@ -1,17 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import './styles.scss';
+
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { Redirect, withRouter, NavLink, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
-  useLastLocation,
+  Link,
+  NavLink,
+  Redirect,
+  withRouter,
+} from 'react-router-dom';
+import {
   RedirectWithoutLastLocation,
+  useLastLocation,
 } from 'react-router-last-location';
 import Switch from 'react-switch';
 import { Collapse } from 'reactstrap';
-
-import PropTypes from 'prop-types';
 import * as globalAction from 'store/action';
-import './styles.scss';
 
 const Child = ({
   title,
@@ -76,7 +85,7 @@ const Child = ({
                   create more professional applications and products.
                 </p>
 
-                <div className='sidebar__section'>
+                {/* <div className='sidebar__section'>
                   <h5>Account</h5>
 
                   {!accessToken && (
@@ -131,37 +140,15 @@ const Child = ({
                       </ul>
                     </>
                   )}
-                </div>
+                </div> */}
 
                 <div className='sidebar__section'>
-                  <h5>Menu</h5>
+                  <h5>Scrapes</h5>
 
                   <ul className='nav flex-column'>
                     <li className='nav-item'>
-                      <NavLink
-                        className='nav-link sidebar__item'
-                        to='/'
-                        isActive={(_, { pathname: path }) => {
-                          return path.match(/^\/$/) || path.match(/^\/p\//);
-                        }}>
-                        Posts
-                      </NavLink>
-                    </li>
-                    {/* <li className='nav-item'>
-                    <NavLink className='nav-link sidebar__item' to='/questions'>
-                      Questions
-                    </NavLink>
-                  </li> */}
-                    <li className='nav-item'>
-                      <NavLink
-                        className='nav-link sidebar__item'
-                        to='/introduce'>
-                        Introduce
-                      </NavLink>
-                    </li>
-                    <li className='nav-item'>
-                      <NavLink className='nav-link sidebar__item' to='/contact'>
-                        Contact
+                      <NavLink className='nav-link sidebar__item' to='/login'>
+                        Scrape
                       </NavLink>
                     </li>
                   </ul>

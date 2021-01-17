@@ -1,5 +1,13 @@
 /// <reference types="cypress" />
 
+export function clickIfExist(element) {
+    cy.get('body').then((body) => {
+        if (body.find(element).length > 0) {
+            cy.get(element).click();
+        }
+    });
+}
+
 function getChildText(parent, selector) {
   const el = Cypress.$(parent).find(selector);
   let value = 0;
@@ -25,7 +33,26 @@ function addResults(currentResults) {
 }
 
 function paginate() {
+//   cy.wait(500);
+  clickIfExist('.popover-x-button-close')
   cy.get('.pagination li').last().click();
+}
+
+function getSingleSearchResult(terms) {
+//   cy.clearLocalStorage();
+
+//   cy.window().then((win) => {
+//     win.sessionStorage.clear();
+//   });
+  cy.visit('https://www.indeed.com');
+  cy.get('#text-input-where').type('{selectall}');
+  cy.get('#text-input-where').type('{backspace}');
+  cy.get('#text-input-what').type(terms).type('{enter}');
+  for (let i = 0; i < 3; i++) {
+    // cy.clearLocalStorage();
+    getSinglePageResults();
+    paginate();
+  }
 }
 
 function getSinglePageResults() {
@@ -53,13 +80,10 @@ function getSinglePageResults() {
 context('Scrape', () => {
   beforeEach(() => {
     cy.wrap([]).as('results');
-    cy.visit('https://www.indeed.com/jobs?q=coding+tutor&l=');
   });
 
   it('gets search results on multiple pages', () => {
-    for (let i = 0; i < 3; i++) {
-      getSinglePageResults();
-      paginate();
-    }
+    getSingleSearchResult('coding tutor');
+    getSingleSearchResult('coding instructor');
   });
 });

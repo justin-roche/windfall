@@ -1,30 +1,41 @@
+import React from 'react';
+
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import cors from 'cors';
+import Express, {
+  Request,
+  Response,
+} from 'express';
+import helmet from 'helmet';
 /* @flow */
 import { resolve } from 'path';
-import Express, { type Request, type Response } from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import compression from 'compression';
-import helmet from 'helmet';
-import serveFavicon from 'serve-favicon';
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom';
-import { renderRoutes, matchRoutes } from 'react-router-config';
-import { LastLocationProvider } from 'react-router-last-location';
 import { CookiesProvider } from 'react-cookie';
-import { Provider } from 'react-redux';
+import ReactDOMServer from 'react-dom/server';
 import { Helmet } from 'react-helmet';
-import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import renderHtml from './utils/render-html';
-import routes from './routes';
+import { Provider } from 'react-redux';
 import {
-  passportMiddleware,
+  matchRoutes,
+  renderRoutes,
+} from 'react-router-config';
+import { StaticRouter } from 'react-router-dom';
+import { LastLocationProvider } from 'react-router-last-location';
+import serveFavicon from 'serve-favicon';
+
+import {
+  ChunkExtractor,
+  ChunkExtractorManager,
+} from '@loadable/server';
+
+import api from './api';
+import { isDev } from './config';
+import {
   notFoundErrorMiddleware,
   serverErrorMiddleware,
 } from './middlewares';
-import api from './api';
-import { isDev } from './config';
+import routes from './routes';
 import configureStore from './store';
+import renderHtml from './utils/render-html';
 
 const app = Express();
 
@@ -45,14 +56,14 @@ if (isDev) {
   app.use(webpackMiddleware());
 }
 
-app.use(
-  passportMiddleware([
-    /^(?!.*api).*/g,
-    /^(?!.*^\/api\/auth\/logout)(\/api\/auth)/,
-    /^(?!.*^\/api\/post\/create-post)(\/api\/post)/,
-    /^(?!.*^\/api\/comment\/post-comment)(\/api\/comment)/,
-  ]),
-);
+// app.use(
+//   passportMiddleware([
+//     /^(?!.*api).*/g,
+//     /^(?!.*^\/api\/auth\/logout)(\/api\/auth)/,
+//     /^(?!.*^\/api\/post\/create-post)(\/api\/post)/,
+//     /^(?!.*^\/api\/comment\/post-comment)(\/api\/comment)/,
+//   ]),
+// );
 
 app.use('/api', api);
 

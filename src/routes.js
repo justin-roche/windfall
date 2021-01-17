@@ -1,29 +1,36 @@
-import Login from 'pages/Login';
-import Register from 'pages/Register';
-import Post from 'pages/Post';
-import { getPostsAction } from 'pages/Post/action';
-import PostDetail from 'pages/Post/PostDetail';
-import {
-  getPostDetailAction,
-  getCommentsAction,
-} from 'pages/Post/PostDetail/action';
-import CreatePost from 'pages/Post/CreatePost';
+import Contact from 'pages/Contact';
 import Introduce from 'pages/Introduce';
 import Projects from 'pages/Introduce/Projects';
-import Contact from 'pages/Contact';
+import Login from 'pages/Login';
 import NotFound from 'pages/NotFound';
+import CreatePost from 'pages/Post/CreatePost';
+import PostDetail from 'pages/Post/PostDetail';
+import {
+  getCommentsAction,
+  getPostDetailAction,
+} from 'pages/Post/PostDetail/action';
+import Register from 'pages/Register';
+import ScrapeResults from 'pages/scrape';
+
 import App from './client/app';
 
 export default [
   {
     component: App,
     routes: [
+      //   {
+      //     path: '/',
+      //     exact: true,
+      //     component: Post,
+      //     title: 'Post',
+      //     loadData: ({ _params }) => [getPostsAction()],
+      //   },
       {
         path: '/',
-        exact: true,
-        component: Post,
-        title: 'Post',
-        loadData: ({ _params }) => [getPostsAction()],
+        // exact: true,
+        component: ScrapeResults,
+        title: 'Scrape Results',
+        // loadData: ({ _params }) => [getScrapeAction()],
       },
       {
         path: '/p/:_id',

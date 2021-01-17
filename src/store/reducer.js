@@ -1,13 +1,23 @@
-/* @flow */
-import { type ActionType, type GlobalStateType } from 'types';
-import { combineReducers } from 'redux';
-import { type History } from 'history';
-import { reducer as form } from 'redux-form';
 import { connectRouter } from 'connected-react-router';
+import { History } from 'history';
 import login from 'pages/Login/reducer';
-import register from 'pages/Register/reducer';
 import postReducer from 'pages/Post/reducer';
-import { UPDATE_TOKEN, UPDATE_LOADING, UPDATE_THEME, GET_ME } from './action';
+import register from 'pages/Register/reducer';
+import scrape from 'pages/scrape/reducer';
+import { combineReducers } from 'redux';
+import { reducer as form } from 'redux-form';
+/* @flow */
+import {
+  ActionType,
+  GlobalStateType,
+} from 'types';
+
+import {
+  GET_ME,
+  UPDATE_LOADING,
+  UPDATE_THEME,
+  UPDATE_TOKEN,
+} from './action';
 
 const initialState: GlobalStateType = {
   isLoading: false,
@@ -56,6 +66,7 @@ const createReducers = (history: History) =>
     login,
     register,
     postReducer,
+    scrape,
   });
 
 export default createReducers;
