@@ -10,7 +10,7 @@ export const getScrapeController = () => async (
   res: Response,
 ) => {
   try {
-    return res.json({ results: [1, 2] });
+    return res.json({ data: { results: [1, 2], metadata: null } });
   } catch (error) {
     return res.json(genericError({ message: error.message }));
   }

@@ -14,7 +14,7 @@ const initialState = {
 const scrape = (state: any = initialState, action: ActionType) => {
   switch (action.type) {
     case GET_SCRAPE.SUCCESS: {
-      const { scrape, metaData } = action.payload;
+      const { results, metaData } = action.payload;
 
       return {
         ...state,
