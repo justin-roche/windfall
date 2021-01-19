@@ -1,11 +1,11 @@
 /// <reference types="cypress" />
 
 export function clickIfExist(element) {
-    cy.get('body').then((body) => {
-        if (body.find(element).length > 0) {
-            cy.get(element).click();
-        }
-    });
+  cy.get('body').then((body) => {
+    if (body.find(element).length > 0) {
+      cy.get(element).click();
+    }
+  });
 }
 
 function getChildText(parent, selector) {
@@ -29,35 +29,27 @@ let results = [];
 
 function addResults(currentResults) {
   results.push(...currentResults);
-  console.log('results length', results.length);
+  cy.log('results length', results.length);
 }
 
 function paginate() {
-//   cy.wait(500);
-  clickIfExist('.popover-x-button-close')
+  clickIfExist('.popover-x-button-close');
   cy.get('.pagination li').last().click();
 }
 
 function getSingleSearchResult(terms) {
-//   cy.clearLocalStorage();
-
-//   cy.window().then((win) => {
-//     win.sessionStorage.clear();
-//   });
   cy.visit('https://www.indeed.com');
   cy.get('#text-input-where').type('{selectall}');
   cy.get('#text-input-where').type('{backspace}');
   cy.get('#text-input-what').type(terms).type('{enter}');
-  for (let i = 0; i < 3; i++) {
-    // cy.clearLocalStorage();
+  for (let i = 0; i < 2; i++) {
     getSinglePageResults();
     paginate();
   }
 }
 
 function getSinglePageResults() {
-  const results = cy
-    .get('#resultsCol')
+  cy.get('#resultsCol')
     .children()
     .get('.result')
     .map((el) => {
@@ -72,7 +64,6 @@ function getSinglePageResults() {
     })
     .then((results) => {
       expect(results.length).to.be.greaterThan(0);
-      console.log(results.length);
       addResults(results);
     });
 }
@@ -82,8 +73,10 @@ context('Scrape', () => {
     cy.wrap([]).as('results');
   });
 
-  it('gets search results on multiple pages', () => {
+  it('gets search results on multiple pages', function () {
     getSingleSearchResult('coding tutor');
-    getSingleSearchResult('coding instructor');
+    cy.wait(0).then(() => {
+      cy.writeFile('./temp/scrape-results.json', JSON.stringify(results));
+    });
   });
 });

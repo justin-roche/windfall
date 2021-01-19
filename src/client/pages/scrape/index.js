@@ -20,7 +20,7 @@ let Login = ({ scrape, getScrapeAction }) => {
       {results.length}
       {scrape?.results?.map((item, i) => (
         <div className='post__item' key={i}>
-          <h1 className='post__title'>{item}</h1>
+          <h1 className='post__title'>{item.title}</h1>
         </div>
       ))}
     </Layout>
