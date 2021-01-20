@@ -1,13 +1,21 @@
-import React, { useEffect } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import Layout from 'components/Layout';
+import Button from 'react-bootstrap/Button';
+import Collapse from 'react-bootstrap/Collapse';
 import { connect } from 'react-redux';
 
 import * as action from './action';
 
 let Login = ({ scrape, getScrapeAction }) => {
+  console.log('rendering login');
   let results = scrape.results;
+  const [expanded, setExpanded] = useState(null);
   useEffect(() => {
+    console.log('use effect');
     if (!results || results.length === 0) {
       getScrapeAction();
     }
@@ -27,6 +35,17 @@ let Login = ({ scrape, getScrapeAction }) => {
             <div className='card-text'>{item.date}</div>
             <div className='card-text'>{item.salary}</div>
             <div className='card-text'>{item.source}</div>
+            <Button
+              onClick={() =>
+                expanded == i ? setExpanded(null) : setExpanded(i)
+              }
+              aria-controls='example-collapse-text'
+              aria-expanded={open}>
+              details
+            </Button>{' '}
+            <Collapse in={expanded === i}>
+              <div dangerouslySetInnerHTML={{ __html: item.description }}></div>
+            </Collapse>
           </div>
         </div>
       ))}
