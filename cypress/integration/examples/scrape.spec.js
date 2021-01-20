@@ -23,18 +23,23 @@ function getChildLink(parent, selector) {
   }
   return value;
 }
-function getInnerHTML(selector, resultIndex) {
-  console.log(selector, resultIndex);
-  cy.get(selector).then((x) => {
-    console.log(x.html());
-    results[resultIndex].description = x.html();
+function getInnerHTML(selector, field, resultIndex) {
+  cy.get('body').then((body) => {
+    let x = body.find(selector);
+    if (x.length > 0) {
+      x = x[0];
+      results[resultIndex][field] = Cypress.$(x).html();
+    } else {
+    }
   });
 }
 
 function getDetailsPage(url, i) {
   cy.log(url);
   cy.visit(url);
-  getInnerHTML('#jobDescriptionText', i);
+  getInnerHTML('#jobDetailsSection', 'details', i);
+  getInnerHTML('#jobDescriptionText', 'description', i);
+  getInnerHTML('#qualificationsSection', 'qualifications', i);
 }
 
 let results = [];

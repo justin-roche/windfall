@@ -44,7 +44,15 @@ let Login = ({ scrape, getScrapeAction }) => {
               details
             </Button>{' '}
             <Collapse in={expanded === i}>
-              <div dangerouslySetInnerHTML={{ __html: item.description }}></div>
+              <div>
+                <div dangerouslySetInnerHTML={{ __html: item.details }}></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: item.qualifications,
+                  }}></div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: item.description }}></div>
+              </div>
             </Collapse>
           </div>
         </div>
