@@ -23,14 +23,12 @@ export default [
       //     exact: true,
       //     component: Post,
       //     title: 'Post',
-      //     loadData: ({ _params }) => [getPostsAction()],
+      //     // loadData: ({ _params }) => [getPostsAction()],
       //   },
       {
         path: '/',
-        // exact: true,
         component: ScrapeResults,
         title: 'Scrape Results',
-        // loadData: ({ _params }) => [getScrapeAction()],
       },
       {
         path: '/p/:_id',

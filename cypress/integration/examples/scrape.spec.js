@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-
 export function clickIfExist(element) {
   cy.get('body').then((body) => {
     if (body.find(element).length > 0) {
@@ -23,6 +22,19 @@ function getChildLink(parent, selector) {
     value = last.href;
   }
   return value;
+}
+function getInnerHTML(selector, resultIndex) {
+  console.log(selector, resultIndex);
+  cy.get(selector).then((x) => {
+    console.log(x.html());
+    results[resultIndex].description = x.html();
+  });
+}
+
+function getDetailsPage(url, i) {
+  cy.log(url);
+  cy.visit(url);
+  getInnerHTML('#jobDescriptionText', i);
 }
 
 let results = [];
@@ -49,9 +61,7 @@ function getSingleSearchResult(terms) {
 }
 
 function getSinglePageResults() {
-  cy.get('#resultsCol')
-    .children()
-    .get('.result')
+  cy.get('.result')
     .map((el) => {
       return {
         title: getChildText(el, '.jobtitle'),
@@ -60,9 +70,13 @@ function getSinglePageResults() {
         salary: getChildText(el, '.salaryText'),
         date: getChildText(el, '.date'),
         originalLink: getChildLink(el, '.title a'),
+        remote: getChildText(el, '.remote'),
+        source: 'indeed',
       };
     })
     .then((results) => {
+      cy.log('results?');
+      cy.log(results);
       expect(results.length).to.be.greaterThan(0);
       addResults(results);
     });
@@ -77,6 +91,22 @@ context('Scrape', () => {
     getSingleSearchResult('coding tutor');
     cy.wait(0).then(() => {
       cy.writeFile('./temp/scrape-results.json', JSON.stringify(results));
+    });
+  });
+
+  it.only('gets iframe data for queue', function () {
+    cy.readFile('./temp/scrape-results.json').then((data) => {
+      results = data;
+      data.forEach((item, i) => {
+        // if (i === 0) {
+        let url = data[i].originalLink;
+        cy.log(url);
+        getDetailsPage(url, i);
+        // }
+      });
+      cy.wait(0).then(() => {
+        cy.writeFile('./temp/scrape-results.json', JSON.stringify(results));
+      });
     });
   });
 });

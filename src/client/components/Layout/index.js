@@ -56,7 +56,7 @@ const Child = ({
               <Collapse isOpen={!collapsed} navbar className='d-lg-block'>
                 <div className='sidebar__title__container'>
                   <Link to='/' className='sidebar__title mr-auto'>
-                    <h1>KBlog</h1>
+                    <h1>Windfall</h1>
                   </Link>
 
                   <Switch
@@ -80,10 +80,7 @@ const Child = ({
                   />
                 </div>
 
-                <p>
-                  Sharing experiences, knowledge, and case studies help people
-                  create more professional applications and products.
-                </p>
+                <p>Making scraping awesome.</p>
 
                 {/* <div className='sidebar__section'>
                   <h5>Account</h5>

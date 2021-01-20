@@ -23,12 +23,14 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-const _ = require('lodash')
+const _ = require('lodash');
+require('cypress-iframe');
+require('./tab-helpers/commands_tab_helpers');
 
-const commands = ['map']
+const commands = ['map'];
 
 _.each(commands, (fn) => {
-    Cypress.Commands.add(fn, {prevSubject:true}, function (...args) {
-        return _[fn](...args)
-    })
-})
+  Cypress.Commands.add(fn, { prevSubject: true }, function (...args) {
+    return _[fn](...args);
+  });
+});

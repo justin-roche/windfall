@@ -6,17 +6,26 @@ import {
 } from 'express';
 import fs from 'fs';
 
+// let mock = true;
+let mock = true;
+function returnFile(res) {
+  let rawdata = fs.readFileSync('./temp/scrape-results.json');
+  let results = JSON.parse(rawdata);
+  return res.json({ data: { results, metadata: null } });
+}
 export const getScrapeController = () => async (
   req: Request,
   res: Response,
 ) => {
   try {
-    cypress.run({ browser: 'chrome', headed: true }).then((r) => {
-      let rawdata = fs.readFileSync('./temp/scrape-results.json');
-      let results = JSON.parse(rawdata);
-      console.log('results in endpoint', results);
-      return res.json({ data: { results, metadata: null } });
-    });
+    if (mock === true) {
+      returnFile(res);
+    } else {
+      // { browser: 'chrome', headed: true }
+      cypress.run().then((r) => {
+        returnFile(res);
+      });
+    }
   } catch (error) {
     return res.json(genericError({ message: error.message }));
   }
