@@ -18,7 +18,11 @@ const scrape = (state: any = initialState, action: ActionType) => {
 
       return {
         ...state,
-        results: [...results],
+        results: [
+          ...results.map((r) => {
+            return { ...r, ...{ approved: true } };
+          }),
+        ],
         metaData: { ...metaData },
       };
     }

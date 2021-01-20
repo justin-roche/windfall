@@ -4,37 +4,63 @@ import React, {
 } from 'react';
 
 import Layout from 'components/Layout';
+import { ToggleButton } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { connect } from 'react-redux';
 
 import * as action from './action';
 
-let Login = ({ scrape, getScrapeAction }) => {
-  console.log('rendering login');
-  let results = scrape.results;
+let ScrapeResults = ({ scrape, getScrapeAction }) => {
+  console.log('rendering scrape');
   const [expanded, setExpanded] = useState(null);
+  const [results, setResults] = useState([]);
+  if (scrape && scrape.results.length > 0 && results.length === 0) {
+    setResults(scrape.results);
+    console.log('results set', results.length, scrape.results);
+  }
   useEffect(() => {
-    console.log('use effect');
     if (!results || results.length === 0) {
       getScrapeAction();
     }
   }, []);
-  console.log('scrape', scrape);
+  function setCheckStatus(i) {
+    let current = [].concat(results);
+    current[i].approved = !current[i].approved;
+    setResults(current);
+  }
   return (
     <Layout title='scrape' returnPath='/' showSidebar={true}>
-      {scrape?.results?.map((item, i) => (
-        <div className='card' key={i}>
-          <div className='card-body'>
-            <h5 className='card-title'>
-              <a href={item.originalLink}>{item.title}</a>
-            </h5>
-            <h6 className='card-subtitle text-muted'>{item.company}</h6>
-            <div className='card-text'>{item.location}</div>
-            <div className='card-text'>{item.remote}</div>
-            <div className='card-text'>{item.date}</div>
-            <div className='card-text'>{item.salary}</div>
-            <div className='card-text'>{item.source}</div>
+      {results?.map((item, i) => (
+        <Card key={item.originalLink}>
+          <Card.Header
+            style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div>
+              <Card.Title>
+                <a href={item.originalLink}>{item.title}</a>
+              </Card.Title>
+              <Card.Subtitle>{item.company}</Card.Subtitle>
+            </div>
+            <div>
+              <ToggleButton
+                type='checkbox'
+                style={{ backgroundColor: 'none' }}
+                checked={item.approved}
+                onClick={(e) => setCheckStatus(i)}></ToggleButton>
+            </div>
+            {item.approved}
+          </Card.Header>
+          <Card.Body>
+            <Card.Text>
+              <div>{item.location}</div>
+              <div>{item.remote}</div>
+              <div>{item.date}</div>
+              <div>{item.salary}</div>
+              <div>{item.source}</div>
+            </Card.Text>
+          </Card.Body>
+          <Card.Footer>
             <Button
               onClick={() =>
                 expanded == i ? setExpanded(null) : setExpanded(i)
@@ -51,12 +77,15 @@ let Login = ({ scrape, getScrapeAction }) => {
                     __html: item.qualifications,
                   }}></div>
                 <div
-                  dangerouslySetInnerHTML={{ __html: item.description }}></div>
+                  dangerouslySetInnerHTML={{
+                    __html: item.description,
+                  }}></div>
               </div>
             </Collapse>
-          </div>
-        </div>
+          </Card.Footer>
+        </Card>
       ))}
+      <Button>Approve Selected</Button>
     </Layout>
   );
 };
@@ -70,4 +99,4 @@ const mapDispatchToProps = {
   getScrapeAction: action.getScrapeAction,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(ScrapeResults);
