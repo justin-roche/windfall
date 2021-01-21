@@ -1,5 +1,6 @@
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
+import database from 'pages/Database/reducer';
 import login from 'pages/Login/reducer';
 import postReducer from 'pages/Post/reducer';
 import register from 'pages/Register/reducer';
@@ -67,6 +68,7 @@ const createReducers = (history: History) =>
     register,
     postReducer,
     scrape,
+    database,
   });
 
 export default createReducers;

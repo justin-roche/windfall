@@ -148,6 +148,13 @@ const Child = ({
                         Scrape
                       </NavLink>
                     </li>
+                    <li className='nav-item'>
+                      <NavLink
+                        className='nav-link sidebar__item'
+                        to='/database'>
+                        Database
+                      </NavLink>
+                    </li>
                   </ul>
                 </div>
 

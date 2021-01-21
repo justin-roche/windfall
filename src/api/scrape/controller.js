@@ -39,9 +39,8 @@ export const postResultsController = () => async (
 ) => {
   try {
     console.log('got post', req.data);
-    debugger;
-    const { ops } = req.postsCollection.insertMany(req.body).then((r) => {
-      req.postsCollection
+    const { ops } = req.resultsCollection.insertMany(req.body).then((r) => {
+      req.resultsCollection
         .find()
         .toArray()
         .then((results) => {

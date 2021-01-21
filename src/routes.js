@@ -1,4 +1,5 @@
 import Contact from 'pages/Contact';
+import DatabasePage from 'pages/Database';
 import Introduce from 'pages/Introduce';
 import Projects from 'pages/Introduce/Projects';
 import Login from 'pages/Login';
@@ -26,9 +27,14 @@ export default [
       //     // loadData: ({ _params }) => [getPostsAction()],
       //   },
       {
-        path: '/',
-        component: ScrapeResults,
+        path: '/database',
         title: 'Scrape Results',
+        component: DatabasePage,
+      },
+      {
+        component: ScrapeResults,
+        path: '/',
+        title: 'Database',
       },
       {
         path: '/p/:_id',
