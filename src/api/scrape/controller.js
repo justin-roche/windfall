@@ -6,6 +6,8 @@ import {
 } from 'express';
 import fs from 'fs';
 
+import { genericError } from '../../models/result.model';
+
 // let mock = true;
 let mock = true;
 function returnFile(res) {
@@ -37,7 +39,15 @@ export const postResultsController = () => async (
 ) => {
   try {
     console.log('got post', req.data);
-    return res.json({ results: 'ok' });
+    debugger;
+    const { ops } = req.postsCollection.insertMany(req.body).then((r) => {
+      req.postsCollection
+        .find()
+        .toArray()
+        .then((results) => {
+          return res.json({ entire: results });
+        });
+    });
   } catch (error) {
     return res.json(genericError({ message: error.message }));
   }

@@ -1,6 +1,9 @@
 /* @flow */
 import { MongoClient } from 'mongodb';
-import { type MongoConnectionType, type MongoResultType } from 'types';
+import {
+  MongoConnectionType,
+  MongoResultType,
+} from 'types';
 
 const useMongo = ({
   host,
@@ -22,6 +25,7 @@ const useMongo = ({
       const postsCollection = db.collection('posts');
 
       const commentsCollection = db.collection('comments');
+      const resultsCollection = db.collection('results');
 
       const result: MongoResultType = {
         client,
@@ -36,6 +40,7 @@ const useMongo = ({
           usersCollection,
           postsCollection,
           commentsCollection,
+          resultsCollection,
         });
       }
 
