@@ -8,7 +8,6 @@ import fs from 'fs';
 
 import { genericError } from '../../models/result.model';
 
-// let mock = true;
 let mock = true;
 function returnFile(res) {
   let rawdata = fs.readFileSync('./temp/scrape-results.json');

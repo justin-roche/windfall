@@ -99,7 +99,7 @@ context('Scrape', () => {
     });
   });
 
-  it.only('gets iframe data for queue', function () {
+  it('gets iframe data for queue', function () {
     cy.readFile('./temp/scrape-results.json').then((data) => {
       results = data;
       data.forEach((item, i) => {
