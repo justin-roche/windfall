@@ -5,6 +5,7 @@ import React, {
 
 import Layout from 'components/Layout';
 import Result from 'components/Result';
+import Table from 'react-bootstrap/Table';
 import { connect } from 'react-redux';
 
 import * as action from './action';
@@ -26,8 +27,25 @@ let DatabasePage = ({ database, getDatabaseAction }) => {
 
   return (
     // <div></div>
-    <Layout title='scrape' returnPath='/' showSidebar={true}>
-      db
+    <Layout title='database' returnPath='/' showSidebar={true}>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Indeed</td>
+            <td>{data.length}</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </Table>
       {data?.map((item, i) => (
         <Result item={item} key={item.originalLink}></Result>
       ))}

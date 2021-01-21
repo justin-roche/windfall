@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { ToggleButton } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 import { connect } from 'react-redux';
@@ -12,7 +11,9 @@ let Result = ({ item, updateScrapeResults }) => {
   const [expanded, setExpanded] = useState(false);
   return (
     <Card key={item.originalLink}>
-      <Card.Header style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Card.Header
+        style={{ display: 'flex', justifyContent: 'space-between' }}
+        onClick={() => (expanded ? setExpanded(false) : setExpanded(true))}>
         <div>
           <Card.Title>
             <a href={item.originalLink}>{item.title}</a>
@@ -28,23 +29,15 @@ let Result = ({ item, updateScrapeResults }) => {
         </div>
         {item.approved}
       </Card.Header>
-      <Card.Body>
-        <Card.Text>
-          <div>{item.location}</div>
-          <div>{item.remote}</div>
-          <div>{item.date}</div>
-          <div>{item.salary}</div>
-          <div>{item.source}</div>
-        </Card.Text>
-      </Card.Body>
-      <Card.Footer>
-        <Button
-          onClick={() => (expanded ? setExpanded(false) : setExpanded(true))}
-          aria-controls='example-collapse-text'
-          aria-expanded={open}>
-          details
-        </Button>{' '}
-        <Collapse in={expanded === true}>
+      <Collapse in={expanded === true}>
+        <Card.Body>
+          <Card.Text>
+            <div>{item.location}</div>
+            <div>{item.remote}</div>
+            <div>{item.date}</div>
+            <div>{item.salary}</div>
+            <div>{item.source}</div>
+          </Card.Text>
           <div>
             <div dangerouslySetInnerHTML={{ __html: item.details }}></div>
             <div
@@ -56,7 +49,17 @@ let Result = ({ item, updateScrapeResults }) => {
                 __html: item.description,
               }}></div>
           </div>
-        </Collapse>
+        </Card.Body>
+      </Collapse>
+      <Card.Footer>
+        {/* <Button
+          onClick={() => (expanded ? setExpanded(false) : setExpanded(true))}
+          aria-controls='example-collapse-text'
+          aria-expanded={open}>
+          details
+        </Button>{' '} */}
+        {/* <Collapse in={expanded === true}> */}
+        {/* </Collapse> */}
       </Card.Footer>
     </Card>
   );
