@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 
 import * as action from './action';
 
-let ScrapeResults = ({ scrape, getScrapeAction }) => {
+let ScrapeResults = ({ scrape, getScrapeAction, addResultsAction }) => {
   console.log('rendering scrape');
   const [expanded, setExpanded] = useState(null);
   const [results, setResults] = useState([]);
@@ -32,6 +32,9 @@ let ScrapeResults = ({ scrape, getScrapeAction }) => {
   }
   return (
     <Layout title='scrape' returnPath='/' showSidebar={true}>
+      <Button onClick={(e) => addResultsAction(results)}>
+        Approve Selected
+      </Button>
       {results?.map((item, i) => (
         <Card key={item.originalLink}>
           <Card.Header
@@ -85,7 +88,9 @@ let ScrapeResults = ({ scrape, getScrapeAction }) => {
           </Card.Footer>
         </Card>
       ))}
-      <Button>Approve Selected</Button>
+      <Button onClick={(e) => addResultsAction(results)}>
+        Approve Selected
+      </Button>
     </Layout>
   );
 };
@@ -97,6 +102,7 @@ const mapStateToProps = ({ global, scrape }) => ({
 
 const mapDispatchToProps = {
   getScrapeAction: action.getScrapeAction,
+  addResultsAction: action.addResultsAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScrapeResults);

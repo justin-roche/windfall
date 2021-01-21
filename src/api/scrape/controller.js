@@ -30,3 +30,15 @@ export const getScrapeController = () => async (
     return res.json(genericError({ message: error.message }));
   }
 };
+
+export const postResultsController = () => async (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    console.log('got post', req.data);
+    return res.json({ results: 'ok' });
+  } catch (error) {
+    return res.json(genericError({ message: error.message }));
+  }
+};
