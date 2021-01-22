@@ -81,70 +81,12 @@ const Child = ({
                 </div>
 
                 <p>Making scraping awesome.</p>
-
-                {/* <div className='sidebar__section'>
-                  <h5>Account</h5>
-
-                  {!accessToken && (
-                    <>
-                      <ul className='nav flex-column'>
-                        <li className='nav-item'>
-                          <Link className='nav-link sidebar__item' to='/login'>
-                            Login
-                          </Link>
-                        </li>
-
-                        <li className='nav-item'>
-                          <Link
-                            className='nav-link sidebar__item'
-                            to='/register'>
-                            Register
-                          </Link>
-                        </li>
-                      </ul>
-                    </>
-                  )}
-
-                  {user && (
-                    <>
-                      <ul className='nav flex-column'>
-                        <li className='nav-item'>
-                          <NavLink
-                            className='nav-link sidebar__item'
-                            to='/profile'>
-                            {user?.name}
-                          </NavLink>
-                        </li>
-
-                        <li className='nav-item'>
-                          <NavLink
-                            className='nav-link sidebar__item'
-                            to='/create-post'>
-                            Create post
-                          </NavLink>
-                        </li>
-
-                        <li className='nav-item'>
-                          <Link
-                            className='nav-link sidebar__item'
-                            to={pathname}
-                            onClick={() => {
-                              updateTokenAction();
-                            }}>
-                            Logout
-                          </Link>
-                        </li>
-                      </ul>
-                    </>
-                  )}
-                </div> */}
-
                 <div className='sidebar__section'>
                   <h5>Scrapes</h5>
 
                   <ul className='nav flex-column'>
                     <li className='nav-item'>
-                      <NavLink className='nav-link sidebar__item' to='/login'>
+                      <NavLink className='nav-link sidebar__item' to='/scrape'>
                         Scrape
                       </NavLink>
                     </li>

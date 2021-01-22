@@ -6,6 +6,7 @@ import React, {
 import Layout from 'components/Layout';
 import Result from 'components/Result';
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import { connect } from 'react-redux';
 
 import * as action from './action';
@@ -16,7 +17,7 @@ let ScrapeResults = ({ scrape, getScrapeAction, addResultsAction }) => {
   const [results, setResults] = useState([]);
   if (scrape && scrape.results.length > 0 && results.length === 0) {
     setResults(scrape.results);
-    console.log('results set', results.length, scrape.results);
+    console.log('results set');
   }
   useEffect(() => {
     if (!results || results.length === 0) {
@@ -33,8 +34,27 @@ let ScrapeResults = ({ scrape, getScrapeAction, addResultsAction }) => {
       <Button onClick={(e) => addResultsAction(results)}>
         Approve Selected
       </Button>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Indeed</td>
+            <td>{results.length}</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </Table>
       {results?.map((item, i) => (
-        <Result item={item} key={item.originalLink}></Result>
+        <Result item={item} key={i}></Result>
+        // <div key={i}>{item.originalLink}</div>
       ))}
       <Button onClick={(e) => addResultsAction(results)}>
         Approve Selected

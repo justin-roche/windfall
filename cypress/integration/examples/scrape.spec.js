@@ -92,10 +92,13 @@ context('Scrape', () => {
     cy.wrap([]).as('results');
   });
 
-  it('gets search results on multiple pages', function () {
+  it.only('gets search results on multiple pages', function () {
     getSingleSearchResult('coding tutor');
     cy.wait(0).then(() => {
-      cy.writeFile('./temp/scrape-results.json', JSON.stringify(results));
+      cy.task('dbTask', { command: 'save', data: results }).then((db) => {
+        console.log(db);
+        cy.log(db);
+      });
     });
   });
 

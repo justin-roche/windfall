@@ -14,12 +14,12 @@ const initialState = {
 const scrape = (state: any = initialState, action: ActionType) => {
   switch (action.type) {
     case GET_SCRAPE.SUCCESS: {
-      const { results, metaData } = action.payload;
-
+      const { data, metaData } = action.payload;
+      console.log('payload', data.length);
       return {
         ...state,
         results: [
-          ...results.map((r) => {
+          ...data.map((r) => {
             return { ...r, ...{ approved: true } };
           }),
         ],

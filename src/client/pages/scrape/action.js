@@ -6,6 +6,7 @@ import { requestAction } from 'utils/request';
 
 export const GET_SCRAPE = actionGenerator('@@GET_SCRAPE');
 export const ADD_RESULTS = actionGenerator('@@ADD_RESULTS');
+export const PERFORM_SCRAPE = actionGenerator('@@PERFORM_SCRAPE');
 
 export const getScrapeAction = (skip?: number = 0) => (dispatch: Dispatch) =>
   dispatch(
@@ -13,11 +14,28 @@ export const getScrapeAction = (skip?: number = 0) => (dispatch: Dispatch) =>
       url: '/scrape/results',
       label: GET_SCRAPE.NAME,
       params: { skip },
-      onSuccess: ({ data }: ApiDataType) => {
-        dispatch({ type: GET_SCRAPE.SUCCESS, payload: data });
+      onSuccess: (res: ApiDataType) => {
+        dispatch({ type: GET_SCRAPE.SUCCESS, payload: res });
       },
       onError: ({ error }: ApiDataType) => {
         dispatch({ type: GET_SCRAPE.ERROR, payload: error });
+      },
+    }),
+  );
+
+export const performScrapeAction = (skip?: number = 0) => (
+  dispatch: Dispatch,
+) =>
+  dispatch(
+    requestAction({
+      url: '/scrape/perform',
+      label: PERFORM_SCRAPE.NAME,
+      params: { skip },
+      onSuccess: ({ data }: ApiDataType) => {
+        dispatch({ type: PERFORM_SCRAPE.SUCCESS, payload: data });
+      },
+      onError: ({ error }: ApiDataType) => {
+        dispatch({ type: PERFORM_SCRAPE.ERROR, payload: error });
       },
     }),
   );

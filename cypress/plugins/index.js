@@ -15,7 +15,41 @@
 /**
  * @type {Cypress.PluginConfig}
  */
+// `on` is used to hook into various events Cypress emits
+// `config` is the resolved Cypress config
+const MongoClient = require('mongodb').MongoClient;
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-}
+  on('task', {
+    dbTask({ command, data }) {
+      return new Promise((resolve) => {
+        MongoClient.connect('mongodb://localhost:27017', (err, client) => {
+          if (err) {
+            console.log(`MONGO CONNECTION ERROR: ${err}`);
+            throw err;
+          } else {
+            let db = client.db('erb');
+            switch (command) {
+              case 'save':
+                db.collection('results')
+                  .insertMany(data)
+                  .then((r) => {
+                    resolve(r);
+                  });
+                break;
+              case 'read':
+                db.collection('results')
+                  .find()
+                  .toArray()
+                  .then((results) => {
+                    resolve(results);
+                  });
+                break;
+              default:
+                break;
+            }
+          }
+        });
+      });
+    },
+  });
+};

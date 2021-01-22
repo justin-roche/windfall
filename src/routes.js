@@ -28,13 +28,18 @@ export default [
       //   },
       {
         path: '/database',
-        title: 'Scrape Results',
+        title: 'Database',
         component: DatabasePage,
       },
       {
         component: ScrapeResults,
+        title: 'Scrape Results',
+        path: '/scrape',
+      },
+      {
+        component: ScrapeResults,
+        title: 'Scrape Results',
         path: '/',
-        title: 'Database',
       },
       {
         path: '/p/:_id',
