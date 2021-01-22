@@ -7,6 +7,7 @@ import { requestAction } from 'utils/request';
 export const GET_SCRAPE = actionGenerator('@@GET_SCRAPE');
 export const ADD_RESULTS = actionGenerator('@@ADD_RESULTS');
 export const PERFORM_SCRAPE = actionGenerator('@@PERFORM_SCRAPE');
+export const CLEAR_RESULTS = actionGenerator('@@CLEAR_RESULTS');
 
 export const getScrapeAction = (skip?: number = 0) => (dispatch: Dispatch) =>
   dispatch(
@@ -22,6 +23,23 @@ export const getScrapeAction = (skip?: number = 0) => (dispatch: Dispatch) =>
       },
     }),
   );
+
+export const clearResultsAction = () => (dispatch: Dispatch) => {
+  console.log('clearing');
+  dispatch(
+    requestAction({
+      url: '/scrape/results',
+      label: CLEAR_RESULTS.NAME,
+      method: 'DELETE',
+      onSuccess: (res: ApiDataType) => {
+        dispatch({ type: CLEAR_RESULTS.SUCCESS, payload: res });
+      },
+      onError: ({ error }: ApiDataType) => {
+        dispatch({ type: CLEAR_RESULTS.ERROR, payload: error });
+      },
+    }),
+  );
+};
 
 export const performScrapeAction = (skip?: number = 0) => (
   dispatch: Dispatch,

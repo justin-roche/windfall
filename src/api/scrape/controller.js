@@ -31,7 +31,7 @@ export const performScrapeController = () => async (
   }
 };
 
-export const getScrapeController = () => async (
+export const getResultsController = () => async (
   req: Request,
   res: Response,
 ) => {
@@ -40,8 +40,22 @@ export const getScrapeController = () => async (
       .find()
       .toArray()
       .then((results) => {
+        console.log('results...', results);
         return res.json({ data: results });
       });
+  } catch (error) {
+    return res.json(genericError({ message: error.message }));
+  }
+};
+
+export const deleteResultsController = () => async (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    req.resultsCollection.deleteMany({}).then((results) => {
+      return res.json({ data: results });
+    });
   } catch (error) {
     return res.json(genericError({ message: error.message }));
   }

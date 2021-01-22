@@ -1,14 +1,17 @@
 import { Router } from 'express';
 
 import {
-  getScrapeController,
+  deleteResultsController,
+  getResultsController,
   performScrapeController,
   postResultsController,
 } from './controller';
 
 const router = Router();
 router.get('/perform', performScrapeController());
-router.get('/results', getScrapeController());
+
+router.get('/results', getResultsController());
+router.delete('/results', deleteResultsController());
 
 router.post('/results', postResultsController());
 

@@ -11,13 +11,18 @@ import { connect } from 'react-redux';
 
 import * as action from './action';
 
-let ScrapeResults = ({ scrape, getScrapeAction, addResultsAction }) => {
+let ScrapeResults = ({
+  scrape,
+  getScrapeAction,
+  addResultsAction,
+  clearResultsAction,
+}) => {
   console.log('rendering scrape');
   const [expanded, setExpanded] = useState(null);
   const [results, setResults] = useState([]);
   if (scrape && scrape.results.length > 0 && results.length === 0) {
     setResults(scrape.results);
-    console.log('results set');
+    console.log('results set', scrape.results);
   }
   useEffect(() => {
     if (!results || results.length === 0) {
@@ -59,6 +64,7 @@ let ScrapeResults = ({ scrape, getScrapeAction, addResultsAction }) => {
       <Button onClick={(e) => addResultsAction(results)}>
         Approve Selected
       </Button>
+      <Button onClick={(e) => clearResultsAction()}>Clear All</Button>
     </Layout>
   );
 };
@@ -71,6 +77,7 @@ const mapStateToProps = ({ global, scrape }) => ({
 const mapDispatchToProps = {
   getScrapeAction: action.getScrapeAction,
   addResultsAction: action.addResultsAction,
+  clearResultsAction: action.clearResultsAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScrapeResults);

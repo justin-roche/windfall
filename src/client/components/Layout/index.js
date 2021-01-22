@@ -87,14 +87,42 @@ const Child = ({
                   <ul className='nav flex-column'>
                     <li className='nav-item'>
                       <NavLink className='nav-link sidebar__item' to='/scrape'>
-                        Scrape
+                        Execute
                       </NavLink>
                     </li>
                     <li className='nav-item'>
                       <NavLink
                         className='nav-link sidebar__item'
                         to='/database'>
+                        Results
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className='sidebar__section'>
+                  <h5>Database</h5>
+
+                  <ul className='nav flex-column'>
+                    <li className='nav-item'>
+                      <NavLink
+                        className='nav-link sidebar__item'
+                        to='/database'>
                         Database
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className='sidebar__section'>
+                  <h5>Export</h5>
+
+                  <ul className='nav flex-column'>
+                    <li className='nav-item'>
+                      <NavLink
+                        className='nav-link sidebar__item'
+                        to='/database'>
+                        CSV
                       </NavLink>
                     </li>
                   </ul>
