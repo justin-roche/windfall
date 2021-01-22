@@ -40,24 +40,6 @@ export const clearResultsAction = () => (dispatch: Dispatch) => {
     }),
   );
 };
-
-export const performScrapeAction = (skip?: number = 0) => (
-  dispatch: Dispatch,
-) =>
-  dispatch(
-    requestAction({
-      url: '/scrape/perform',
-      label: PERFORM_SCRAPE.NAME,
-      params: { skip },
-      onSuccess: ({ data }: ApiDataType) => {
-        dispatch({ type: PERFORM_SCRAPE.SUCCESS, payload: data });
-      },
-      onError: ({ error }: ApiDataType) => {
-        dispatch({ type: PERFORM_SCRAPE.ERROR, payload: error });
-      },
-    }),
-  );
-
 export const addResultsAction = (data: Object) => (dispatch: Dispatch) =>
   dispatch(
     requestAction({

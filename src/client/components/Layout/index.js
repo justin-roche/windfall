@@ -86,14 +86,12 @@ const Child = ({
 
                   <ul className='nav flex-column'>
                     <li className='nav-item'>
-                      <NavLink className='nav-link sidebar__item' to='/scrape'>
+                      <NavLink className='nav-link sidebar__item' to='/execute'>
                         Execute
                       </NavLink>
                     </li>
                     <li className='nav-item'>
-                      <NavLink
-                        className='nav-link sidebar__item'
-                        to='/database'>
+                      <NavLink className='nav-link sidebar__item' to='/results'>
                         Results
                       </NavLink>
                     </li>

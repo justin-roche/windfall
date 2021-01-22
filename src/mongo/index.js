@@ -20,12 +20,8 @@ const useMongo = ({
     .then((client) => {
       const db = client.db(database);
 
-      const usersCollection = db.collection('users');
-
-      const postsCollection = db.collection('posts');
-
-      const commentsCollection = db.collection('comments');
       const resultsCollection = db.collection('results');
+      const savedCollection = db.collection('saved');
 
       const result: MongoResultType = {
         client,
@@ -37,10 +33,8 @@ const useMongo = ({
 
         Object.assign(request, {
           ...result,
-          usersCollection,
-          postsCollection,
-          commentsCollection,
           resultsCollection,
+          savedCollection,
         });
       }
 

@@ -1,5 +1,6 @@
 import Contact from 'pages/Contact';
 import DatabasePage from 'pages/Database';
+import Execute from 'pages/Execute';
 import Introduce from 'pages/Introduce';
 import Projects from 'pages/Introduce/Projects';
 import Login from 'pages/Login';
@@ -19,13 +20,11 @@ export default [
   {
     component: App,
     routes: [
-      //   {
-      //     path: '/',
-      //     exact: true,
-      //     component: Post,
-      //     title: 'Post',
-      //     // loadData: ({ _params }) => [getPostsAction()],
-      //   },
+      {
+        component: Execute,
+        title: 'Execute Scrape',
+        path: '/execute',
+      },
       {
         path: '/database',
         title: 'Database',

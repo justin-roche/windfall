@@ -13,7 +13,7 @@ function returnFile(res) {
   let results = JSON.parse(rawdata);
   return res.json({ data: { results, metadata: null } });
 }
-export const performScrapeController = () => async (
+export const executeScrapeController = () => async (
   req: Request,
   res: Response,
 ) => {
@@ -40,7 +40,6 @@ export const getResultsController = () => async (
       .find()
       .toArray()
       .then((results) => {
-        console.log('results...', results);
         return res.json({ data: results });
       });
   } catch (error) {
@@ -66,7 +65,7 @@ export const postResultsController = () => async (
 ) => {
   try {
     const { ops } = req.resultsCollection.insertMany(req.body).then((r) => {
-      req.resultsCollection
+      req.savedCollection
         .find()
         .toArray()
         .then((results) => {
