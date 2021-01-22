@@ -9,7 +9,7 @@ export const EXECUTE_SCRAPE = actionGenerator('@@EXECUTE_SCRAPE');
 export const executeScrapeAction = () => (dispatch: Dispatch) =>
   dispatch(
     requestAction({
-      url: '/scrape/execute',
+      url: '/execute',
       label: EXECUTE_SCRAPE.NAME,
       onSuccess: ({ data }: ApiDataType) => {
         dispatch({ type: EXECUTE_SCRAPE.SUCCESS, payload: data });

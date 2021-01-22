@@ -1,21 +1,14 @@
 import { Router } from 'express';
 
-import auth from './auth';
-import comment from './comment';
 import database from './database';
+import execute from './execute';
 import generic from './generic';
-import post from './post';
-import scrape from './scrape';
+import results from './results';
 
 const router = Router();
 
-router.use('/auth', auth);
-
-router.use('/post', post);
-
-router.use('/comment', comment);
-
-router.use('/scrape', scrape);
+router.use('/scrape', results);
+router.use('/execute', execute);
 router.use('/database', database);
 
 router.use('/', [generic]);
