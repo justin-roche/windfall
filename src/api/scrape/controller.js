@@ -59,20 +59,3 @@ export const deleteResultsController = () => async (
     return res.json(genericError({ message: error.message }));
   }
 };
-export const postResultsController = () => async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    const { ops } = req.resultsCollection.insertMany(req.body).then((r) => {
-      req.savedCollection
-        .find()
-        .toArray()
-        .then((results) => {
-          return res.json({ data: results });
-        });
-    });
-  } catch (error) {
-    return res.json(genericError({ message: error.message }));
-  }
-};

@@ -43,7 +43,7 @@ export const clearResultsAction = () => (dispatch: Dispatch) => {
 export const addResultsAction = (data: Object) => (dispatch: Dispatch) =>
   dispatch(
     requestAction({
-      url: '/scrape/results',
+      url: '/database/all',
       label: ADD_RESULTS.NAME,
       method: 'POST',
       data,
