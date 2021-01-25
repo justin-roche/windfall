@@ -4,7 +4,7 @@ import database from 'pages/Database/reducer';
 import login from 'pages/Login/reducer';
 import postReducer from 'pages/Post/reducer';
 import register from 'pages/Register/reducer';
-import scrape from 'pages/scrape/reducer';
+import scrape from 'pages/Results/reducer';
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 /* @flow */

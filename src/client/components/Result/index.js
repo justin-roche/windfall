@@ -19,6 +19,8 @@ let Result = ({ item, updateScrapeResults }) => {
             <a href={item.originalLink}>{item.title}</a>
           </Card.Title>
           <Card.Subtitle>{item.company}</Card.Subtitle>
+          <div>{item.date}</div>
+          <div>{item._date}</div>
         </div>
         <div>
           <ToggleButton

@@ -12,7 +12,7 @@ import {
   getPostDetailAction,
 } from 'pages/Post/PostDetail/action';
 import Register from 'pages/Register';
-import ScrapeResults from 'pages/scrape';
+import ScrapeResults from 'pages/Results';
 
 import App from './client/app';
 
@@ -33,7 +33,7 @@ export default [
       {
         component: ScrapeResults,
         title: 'Scrape Results',
-        path: '/scrape',
+        path: '/results',
       },
       {
         component: ScrapeResults,
