@@ -28,18 +28,18 @@ module.exports = (on, config) => {
             throw err;
           } else {
             let db = client.db('erb');
-            data = data.map((item) => {
-              return {
-                ...item,
-                ...{
-                  _id: {
-                    title: item.title,
-                    location: item.location,
-                    company: item.company,
-                  },
-                },
-              };
-            });
+            // data = data.map((item) => {
+            //   return {
+            //     ...item,
+            //     ...{
+            //       _id: {
+            //         title: item.title,
+            //         location: item.location,
+            //         company: item.company,
+            //       },
+            //     },
+            //   };
+            // });
             let ids = data.map((item) => item._id);
             switch (command) {
               case 'save':
