@@ -6,19 +6,29 @@ import React, {
 import Layout from 'components/Layout';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import { connect } from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import * as action from './action';
+import { getCommandsAction } from './action';
 
-let Execute = ({ executeAction, getCommandsAction, global, commands }) => {
+let Execute = () => {
   const [expanded, setExpanded] = useState(null);
+  const [commandsState, setCommandsState] = useState([]);
+  const commands = useSelector((state) => state.execute.commands);
+  const dispatch = useDispatch();
   useEffect(() => {
-    getCommandsAction();
+    dispatch(getCommandsAction());
   }, []);
+  useEffect(() => {
+    setCommandsState(commands);
+  }, [commands]);
   return (
     <Layout title='scrape' returnPath='/' showSidebar={true}>
       <Table striped bordered hover>
         <thead>
+          length:{commandsState.length}
           <tr>
             <th>Source</th>
             <th></th>
@@ -28,8 +38,8 @@ let Execute = ({ executeAction, getCommandsAction, global, commands }) => {
         </thead>
         {commands?.length > 0 ? (
           <tbody>
-            {commands.map((command) => (
-              <tr>
+            {commands.map((command, i) => (
+              <tr key={i}>
                 <td>{command.url}</td>
                 <td></td>
                 <td></td>
@@ -39,19 +49,21 @@ let Execute = ({ executeAction, getCommandsAction, global, commands }) => {
           </tbody>
         ) : null}
       </Table>
-      <Button onClick={(e) => executeAction()}>Execute Selected</Button>
+      <Button onClick={(e) => dispatch(executeAction())}>
+        Execute Selected
+      </Button>
     </Layout>
   );
 };
 
-const mapStateToProps = ({ global, execute }) => ({
-  global,
-  commands: execute.commands,
-});
+// const mapStateToProps = ({ global, execute }) => ({
+//   global,
+//   commands: ['a'], //execute.commands,
+// });
 
-const mapDispatchToProps = {
-  executeAction: action.executeScrapeAction,
-  getCommandsAction: action.getCommandsAction,
-};
+// const mapDispatchToProps = {
+//   executeAction: action.executeScrapeAction,
+//   getCommandsAction: action.getCommandsAction,
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Execute);
+export default Execute; //connect(mapStateToProps, mapDispatchToProps)(Execute);
