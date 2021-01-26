@@ -2,9 +2,6 @@ import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import database from 'pages/Database/reducer';
 import execute from 'pages/Execute/reducer';
-import login from 'pages/Login/reducer';
-import postReducer from 'pages/Post/reducer';
-import register from 'pages/Register/reducer';
 import scrape from 'pages/Results/reducer';
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
@@ -65,9 +62,6 @@ const createReducers = (history: History) =>
     router: connectRouter(history),
     form,
     global,
-    login,
-    register,
-    postReducer,
     scrape,
     execute,
     database,
