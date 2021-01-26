@@ -1,8 +1,9 @@
 /// <reference types="cypress" />
 import _ from 'lodash';
-import moment from 'moment';
 
-export function clickIfExist(element) {
+import { commands } from '../fixtures/commands';
+
+function clickIfExist(element) {
   cy.get('body').then((body) => {
     if (body.find(element).length > 0) {
       cy.get(element).click();
@@ -103,7 +104,10 @@ function searchAndPaginate(command) {
       getFields(command.resultFields).then((results) => {
         expect(results.length).to.be.greaterThan(0);
         addResults(results, command);
-        cy.log('added', results);
+        results = results.map((r) => {
+          r._searchTerms = currentSearch;
+          return r;
+        });
       });
       if (i < command.pagination.pages - 1) paginate(command.pagination);
     }
@@ -125,55 +129,12 @@ function searchAndPaginate(command) {
 //   }
 // }
 
-let fixture = {
-  type: 'searchAndPaginate',
-  url: 'https://www.indeed.com',
-  search: {
-    type: 'search',
-    clear: '#text-input-where',
-    target: '#text-input-what',
-    terms: ['coding tutor'],
-  },
-  pagination: {
-    target: '.pagination li',
-    clear: '.popover-x-button-close',
-    pages: 1,
-  },
-  document: {
-    source: 'Indeed',
-    transformResults: function (result) {
-      let daysAgo = result.date.split(' ')[0].replace('+', '');
-      result._date = moment().subtract(Number(daysAgo), 'd').format('DD-MM-YY');
-    },
-  },
-  resultFields: {
-    type: 'getFields',
-    parentSelector: '.result',
-    fields: {
-      title: '.jobtitle',
-      location: '.location',
-      company: '.company',
-      salary: '.salaryText',
-      date: '.date',
-      remote: '.remote',
-      originalLink: { type: 'link', target: '.title a' },
-    },
-  },
-  //   type: 'enqueue',
-  //   url: { target: 'originalLink' },
-  //   commands: [
-  //     {
-  //       type: 'getFields',
-  //       fields: {
-  //         details: '#jobDetailsSection',
-  //         description: '#jobDescriptionText',
-  //         qualifications: '#qualificationsSection',
-  //       },
-  //     },
-  //   ],
-  // },
-};
-let q = [fixture];
+// transformResults:
+//   "function (result) { let daysAgo = result.date.split(' ')[0].replace('+', ''); result._date = moment().subtract(Number(daysAgo), 'd').format('DD-MM-YY');",
+function getCommands() {
+  let rawdata = fs.readFileSync('./cypress/fixtures/commands.json');
+  return JSON.parse(rawdata);
+}
 
 context('Scrape', () => {
   beforeEach(() => {
@@ -181,7 +142,8 @@ context('Scrape', () => {
   });
 
   it.only('gets search results on multiple pages', function () {
-    searchAndPaginate(q[0]);
+    let command = commands[0];
+    searchAndPaginate(command);
     cy.task('dbTask', { command: 'save', data: results }).then((db) => {
       console.log('db', db, results);
     });

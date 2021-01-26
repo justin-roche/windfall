@@ -1,9 +1,13 @@
 import { ActionType } from 'types';
 
-import { GET_SCRAPE } from './action';
+import {
+  EXECUTE_SCRAPE,
+  GET_COMMANDS,
+} from './action';
 
 const initialState = {
   results: [],
+  commands: [],
   metaData: {
     index: 0,
     total: 0,
@@ -11,26 +15,24 @@ const initialState = {
   error: null,
 };
 
-const scrape = (state: any = initialState, action: ActionType) => {
+const execute = (state: any = initialState, action: ActionType) => {
   switch (action.type) {
-    case GET_SCRAPE.SUCCESS: {
-      const { data, metaData } = action.payload;
-      console.log('payload', data.length);
+    case GET_COMMANDS.SUCCESS: {
       return {
         ...state,
-        results: [
-          ...data.map((r) => {
-            return { ...r, ...{ approved: true } };
-          }),
-        ],
-        metaData: { ...metaData },
+        commands: action.payload,
       };
     }
-    case GET_SCRAPE.ERROR: {
+    case EXECUTE_SCRAPE.SUCCESS: {
+      const { data, metaData } = action.payload;
+      console.log('scrape success', data.length);
+      return { ...state };
+    }
+    case EXECUTE_SCRAPE.ERROR: {
       return { ...state, error: action.payload };
     }
     default:
       return { ...state };
   }
 };
-export default scrape;
+export default execute;

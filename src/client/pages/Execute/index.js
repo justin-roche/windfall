@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import Layout from 'components/Layout';
 import Button from 'react-bootstrap/Button';
@@ -7,9 +10,11 @@ import { connect } from 'react-redux';
 
 import * as action from './action';
 
-let Execute = ({ executeAction }) => {
-  console.log('rendering scrape');
+let Execute = ({ executeAction, getCommandsAction, global, commands }) => {
   const [expanded, setExpanded] = useState(null);
+  useEffect(() => {
+    getCommandsAction();
+  }, []);
   return (
     <Layout title='scrape' returnPath='/' showSidebar={true}>
       <Table striped bordered hover>
@@ -21,26 +26,32 @@ let Execute = ({ executeAction }) => {
             <th></th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Indeed</td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
+        {commands?.length > 0 ? (
+          <tbody>
+            {commands.map((command) => (
+              <tr>
+                <td>{command.url}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        ) : null}
       </Table>
       <Button onClick={(e) => executeAction()}>Execute Selected</Button>
     </Layout>
   );
 };
 
-const mapStateToProps = ({ global }) => ({
+const mapStateToProps = ({ global, execute }) => ({
   global,
+  commands: execute.commands,
 });
 
 const mapDispatchToProps = {
   executeAction: action.executeScrapeAction,
+  getCommandsAction: action.getCommandsAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Execute);
