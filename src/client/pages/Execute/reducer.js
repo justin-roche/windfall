@@ -20,7 +20,10 @@ const execute = (state: any = initialState, action: ActionType) => {
     case GET_COMMANDS.SUCCESS: {
       return {
         ...state,
-        commands: action.payload,
+        commands: action.payload.map((command) => {
+          command.checked = true;
+          return command;
+        }),
       };
     }
     case EXECUTE_SCRAPE.SUCCESS: {

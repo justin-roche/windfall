@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 
 import Layout from 'components/Layout';
+import { ToggleButton } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import {
@@ -27,16 +28,18 @@ let Execute = () => {
   useEffect(() => {
     setCommandsState(commands);
   }, [commands]);
+  let handleCheck = function (i) {
+    let arr = [].concat(commandsState);
+    arr[i].checked = !arr[i].checked;
+    setCommandsState(arr);
+  };
   return (
     <Layout title='scrape' returnPath='/' showSidebar={true}>
       <Table striped bordered hover>
         <thead>
-          length:{commandsState.length}
           <tr>
             <th>Source</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>Run</th>
           </tr>
         </thead>
         {commands?.length > 0 ? (
@@ -44,9 +47,12 @@ let Execute = () => {
             {commands.map((command, i) => (
               <tr key={i}>
                 <td>{command.url}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                  <ToggleButton
+                    type='checkbox'
+                    checked={command.checked}
+                    onClick={(e) => handleCheck(i)}></ToggleButton>
+                </td>
               </tr>
             ))}
           </tbody>
