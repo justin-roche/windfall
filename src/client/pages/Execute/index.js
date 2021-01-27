@@ -11,7 +11,10 @@ import {
   useSelector,
 } from 'react-redux';
 
-import { getCommandsAction } from './action';
+import {
+  executeScrapeAction,
+  getCommandsAction,
+} from './action';
 
 let Execute = () => {
   const [expanded, setExpanded] = useState(null);
@@ -49,21 +52,10 @@ let Execute = () => {
           </tbody>
         ) : null}
       </Table>
-      <Button onClick={(e) => dispatch(executeAction())}>
+      <Button onClick={(e) => dispatch(executeScrapeAction())}>
         Execute Selected
       </Button>
     </Layout>
   );
 };
-
-// const mapStateToProps = ({ global, execute }) => ({
-//   global,
-//   commands: ['a'], //execute.commands,
-// });
-
-// const mapDispatchToProps = {
-//   executeAction: action.executeScrapeAction,
-//   getCommandsAction: action.getCommandsAction,
-// };
-
-export default Execute; //connect(mapStateToProps, mapDispatchToProps)(Execute);
+export default Execute;

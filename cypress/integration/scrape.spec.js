@@ -3,6 +3,8 @@ import _ from 'lodash';
 
 import { commands } from '../fixtures/commands';
 
+-
+
 function clickIfExist(element) {
   cy.get('body').then((body) => {
     if (body.find(element).length > 0) {
@@ -114,23 +116,6 @@ function searchAndPaginate(command) {
   }
 }
 
-// function executeQueue(q) {
-//   while (q.length > 0) {
-//     let current = q.shift();
-//     switch (current.type) {
-//       case 'searchAndPaginate':
-//         searchAndPaginate(current);
-//         break;
-//       case 'getFields':
-//         break;
-//       default:
-//         break;
-//     }
-//   }
-// }
-
-// transformResults:
-//   "function (result) { let daysAgo = result.date.split(' ')[0].replace('+', ''); result._date = moment().subtract(Number(daysAgo), 'd').format('DD-MM-YY');",
 function getCommands() {
   let rawdata = fs.readFileSync('./cypress/fixtures/commands.json');
   return JSON.parse(rawdata);
@@ -142,7 +127,9 @@ context('Scrape', () => {
   });
 
   it.only('gets search results on multiple pages', function () {
-    let command = commands[0];
+    let envCommands = Cypress.env('commands');
+    let command = null;
+    command = envCommands ? envCommands[1] : commands[1];
     searchAndPaginate(command);
     cy.task('dbTask', { command: 'save', data: results }).then((db) => {
       console.log('db', db, results);

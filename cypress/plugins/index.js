@@ -19,6 +19,7 @@
 // `config` is the resolved Cypress config
 const MongoClient = require('mongodb').MongoClient;
 module.exports = (on, config) => {
+  require('cypress-log-to-output').install(on);
   on('task', {
     dbTask({ command, data }) {
       return new Promise((resolve) => {

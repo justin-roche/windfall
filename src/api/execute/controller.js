@@ -5,6 +5,7 @@ import {
   Response,
 } from 'express';
 
+import { commands } from '../../../cypress/fixtures/commands';
 import { genericError } from '../../models/result.model';
 
 export const executeScrapeController = () => async (
@@ -13,14 +14,22 @@ export const executeScrapeController = () => async (
 ) => {
   console.log('executing...');
   try {
-    cypress.run().then((r) => {
-      req.resultsCollection
-        .find()
-        .toArray()
-        .then((results) => {
-          return res.json({ data: results });
-        });
-    });
+    // headless: false,
+    // browser: 'chrome',
+    // headless: false,
+    cypress
+      .run({
+        env: { commands },
+        quiet: false,
+      })
+      .then((r) => {
+        req.resultsCollection
+          .find()
+          .toArray()
+          .then((results) => {
+            return res.json({ data: results });
+          });
+      });
   } catch (error) {
     return res.json(genericError({ message: error.message }));
   }

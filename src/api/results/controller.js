@@ -1,4 +1,3 @@
-import cypress from 'cypress';
 /* @flow */
 import {
   Request,
@@ -6,24 +5,6 @@ import {
 } from 'express';
 
 import { genericError } from '../../models/result.model';
-
-export const executeScrapeController = () => async (
-  req: Request,
-  res: Response,
-) => {
-  try {
-    cypress.run().then((r) => {
-      req.resultsCollection
-        .find()
-        .toArray()
-        .then((results) => {
-          return res.json({ data: results });
-        });
-    });
-  } catch (error) {
-    return res.json(genericError({ message: error.message }));
-  }
-};
 
 export const getResultsController = () => async (
   req: Request,
@@ -53,3 +34,27 @@ export const deleteResultsController = () => async (
     return res.json(genericError({ message: error.message }));
   }
 };
+// export const executeScrapeController = () => async (
+//   req: Request,
+//   res: Response,
+// ) => {
+//   try {
+//     // browser: 'chrome',
+//     cypress
+//       .run({
+//         env: { commands: { a: 1 } },
+//         headless: false,
+//         quiet: false,
+//       })
+//       .then((r) => {
+//         req.resultsCollection
+//           .find()
+//           .toArray()
+//           .then((results) => {
+//             return res.json({ data: results });
+//           });
+//       });
+//   } catch (error) {
+//     return res.json(genericError({ message: error.message }));
+//   }
+// };
