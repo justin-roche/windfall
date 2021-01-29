@@ -13,7 +13,7 @@ export let commands = [
     pagination: {
       target: '.pagination li',
       clear: '.popover-x-button-close',
-      pages: 0,
+      pages: 3,
     },
     document: {
       source: 'Monster',
@@ -50,7 +50,7 @@ export let commands = [
     pagination: {
       target: '.pagination li',
       clear: '.popover-x-button-close',
-      pages: 1,
+      pages: 3,
     },
     document: {
       source: 'Indeed',

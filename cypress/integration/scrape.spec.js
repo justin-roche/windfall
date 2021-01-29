@@ -3,7 +3,8 @@ import _ from 'lodash';
 
 import { commands } from '../fixtures/commands';
 
--
+let net = require('net');
+// ipcReport().then((r) => {});
 
 function clickIfExist(element) {
   cy.get('body').then((body) => {
@@ -99,13 +100,15 @@ function executeSearch(command) {
 function searchAndPaginate(command) {
   cy.visit(command.url);
   let searches = command.search.terms;
-  while (searches.length > 0) {
-    let currentSearch = searches.shift();
+  for (let i = 0; i < searches.length; i++) {
+    cy.task('logTask', { data: 'search' + i }).then(() => {});
+    let currentSearch = searches[i];
     executeSearch({ ...command.search, ...{ terms: currentSearch } });
-    for (let i = 0; i < command.pagination.pages; i++) {
+    for (let ii = 0; ii < command.pagination.pages; ii++) {
       getFields(command.resultFields).then((results) => {
         expect(results.length).to.be.greaterThan(0);
         addResults(results, command);
+        cy.task('logTask', { data: 'page' + ii }).then(() => {});
         results = results.map((r) => {
           r._searchTerms = currentSearch;
           return r;
@@ -130,26 +133,14 @@ context('Scrape', () => {
     let envCommands = Cypress.env('commands');
     let command = null;
     command = envCommands ? envCommands[1] : commands[1];
-    searchAndPaginate(command);
-    cy.task('dbTask', { command: 'save', data: results }).then((db) => {
-      console.log('db', db, results);
+    cy.task('logConnectTask', { data: 0 }).then((r) => {
+      cy.task('logTask', { data: 'starting' }).then((r) => {
+        searchAndPaginate(command);
+        cy.task('logTask', { data: 'finished' }).then((r) => {});
+        //   cy.task('dbTask', { command: 'save', data: results }).then((db) => {
+        //     console.log('db', db, results);
+        //   });
+      });
     });
   });
 });
-
-it('gets iframe data for queue', function () {
-  cy.readFile('./temp/scrape-results.json').then((data) => {
-    results = data;
-    data.forEach((item, i) => {
-      // if (i === 0) {
-      let url = data[i].originalLink;
-      cy.log(url);
-      getDetailsPage(url, i);
-      // }
-    });
-    cy.wait(0).then(() => {
-      cy.writeFile('./temp/scrape-results.json', JSON.stringify(results));
-    });
-  });
-});
-// });

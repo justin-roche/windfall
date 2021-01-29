@@ -21,10 +21,12 @@ export const getCommandsAction = () => (dispatch: Dispatch) =>
     }),
   );
 
-export const executeScrapeAction = () => (dispatch: Dispatch) =>
+export const executeScrapeAction = (data) => (dispatch: Dispatch) =>
   dispatch(
     requestAction({
       url: '/execute',
+      method: 'POST',
+      data,
       label: EXECUTE_SCRAPE.NAME,
       onSuccess: ({ data }: ApiDataType) => {
         dispatch({ type: EXECUTE_SCRAPE.SUCCESS, payload: data });

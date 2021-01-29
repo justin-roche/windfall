@@ -18,9 +18,27 @@
 // `on` is used to hook into various events Cypress emits
 // `config` is the resolved Cypress config
 const MongoClient = require('mongodb').MongoClient;
+const ipc = require('node-ipc');
 module.exports = (on, config) => {
-  require('cypress-log-to-output').install(on);
   on('task', {
+    logConnectTask({ data }) {
+      return new Promise((resolve, reject) => {
+        ipc.config.id = 'hello';
+        ipc.config.retry = 3;
+        ipc.connectTo('world', function () {
+          resolve(true);
+        });
+      });
+    },
+    logTask({ data }) {
+      return new Promise((resolve, reject) => {
+        ipc.of.world.emit(
+          'message', //any event or message type your server listens for
+          data,
+        );
+        resolve(true);
+      });
+    },
     dbTask({ command, data }) {
       return new Promise((resolve) => {
         MongoClient.connect('mongodb://localhost:27017', (err, client) => {

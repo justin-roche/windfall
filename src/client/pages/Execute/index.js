@@ -33,6 +33,11 @@ let Execute = () => {
     arr[i].checked = !arr[i].checked;
     setCommandsState(arr);
   };
+  let handleExecute = function () {
+    dispatch(
+      executeScrapeAction(commandsState.filter((command) => command.checked)),
+    );
+  };
   return (
     <Layout title='scrape' returnPath='/' showSidebar={true}>
       <Table striped bordered hover>
@@ -58,9 +63,7 @@ let Execute = () => {
           </tbody>
         ) : null}
       </Table>
-      <Button onClick={(e) => dispatch(executeScrapeAction())}>
-        Execute Selected
-      </Button>
+      <Button onClick={(e) => handleExecute()}>Execute Selected</Button>
     </Layout>
   );
 };
