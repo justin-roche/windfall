@@ -3,6 +3,7 @@ import moment from 'moment';
 export let commands = [
   {
     type: 'searchAndPaginate',
+    name: 'Monster Code Teaching',
     url: 'https://www.monster.com',
     search: {
       type: 'search',
@@ -40,12 +41,13 @@ export let commands = [
   },
   {
     type: 'searchAndPaginate',
+    name: 'Indeed Code Teaching',
     url: 'https://www.indeed.com',
     search: {
       type: 'search',
       clear: '#text-input-where',
       target: '#text-input-what',
-      terms: ['coding tutor'],
+      terms: ['coding tutor', 'code instructor'],
     },
     pagination: {
       target: '.pagination li',

@@ -39,6 +39,12 @@ module.exports = (on, config) => {
         resolve(true);
       });
     },
+    progressTask({ data }) {
+      return new Promise((resolve, reject) => {
+        ipc.of.world.emit('progress', data);
+        resolve(true);
+      });
+    },
     dbTask({ command, data }) {
       return new Promise((resolve) => {
         MongoClient.connect('mongodb://localhost:27017', (err, client) => {

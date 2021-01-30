@@ -24,6 +24,7 @@ export const getCommandsAction = () => (dispatch: Dispatch) =>
 export const executeScrapeAction = (data) => (dispatch: Dispatch) =>
   dispatch(
     requestAction({
+      noLoad: true,
       url: '/execute',
       method: 'POST',
       data,

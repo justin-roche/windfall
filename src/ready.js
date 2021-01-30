@@ -1,14 +1,16 @@
 import { createServer } from 'http';
+import socketIO from 'socket.io';
+
 import {
-  NODE_ENV,
-  PORT,
   DB_HOST as host,
   DB_NAME as database,
-  DB_USER as user,
   DB_PASS as password,
+  DB_USER as user,
+  NODE_ENV,
+  PORT,
 } from './config';
-import hooks from './tools/hooks';
 import useMongo from './mongo';
+import hooks from './tools/hooks';
 
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
@@ -27,9 +29,12 @@ global.__SERVER__ = true;
       app: server,
     });
 
-    createServer(server).listen(PORT, () => {
+    let boundServer = createServer(server).listen(PORT, () => {
       console.log(`Starting the ${NODE_ENV} server...`);
     });
+    // var server = http.createServer(app);
+    let io = socketIO(boundServer);
+    server.set('socketio', io);
   } catch (error) {
     console.error(error);
 

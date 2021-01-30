@@ -1,11 +1,16 @@
 /* @flow */
-import axios, { type AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import omit from 'lodash/omit';
-import { type Dispatch } from 'redux';
-import { type RequestType, type ApiActionType, type ApiDataType } from 'types';
+import { Dispatch } from 'redux';
 import { updateLoadingAction } from 'store/action';
-import cookies from './cookies';
+import {
+  ApiActionType,
+  ApiDataType,
+  RequestType,
+} from 'types';
+
 import { actionGenerator } from './';
+import cookies from './cookies';
 
 const getBaseUrl = () => {
   if (!__DEV__) return 'https://htdangkhoa-erb.herokuapp.com/api';
@@ -57,7 +62,7 @@ export const request = async ({
 export const requestAction = (options: ApiActionType) => async (
   dispatch: Dispatch,
 ) => {
-  if (__CLIENT__) {
+  if (__CLIENT__ && !options.noLoad) {
     dispatch(updateLoadingAction(true));
   }
 

@@ -96,19 +96,30 @@ function executeSearch(command) {
   }
   cy.get(command.target).type(command.terms).type('{enter}');
 }
-
+function getProgress(search, page, command) {
+  let totalPages = command.search.terms.length * command.pagination.pages;
+  let currentPages = command.pagination.pages * search + page + 1;
+  let p = (currentPages / totalPages) * 100;
+  cy.task('progressTask', {
+    data: { percent: p, command: command },
+  }).then((r) => {});
+}
 function searchAndPaginate(command) {
-  cy.visit(command.url);
   let searches = command.search.terms;
+  cy.task('progressTask', {
+    data: { percent: 1, command: command },
+  }).then((r) => {});
   for (let i = 0; i < searches.length; i++) {
     cy.task('logTask', { data: 'search' + i }).then(() => {});
     let currentSearch = searches[i];
+    cy.visit(command.url);
     executeSearch({ ...command.search, ...{ terms: currentSearch } });
     for (let ii = 0; ii < command.pagination.pages; ii++) {
       getFields(command.resultFields).then((results) => {
         expect(results.length).to.be.greaterThan(0);
         addResults(results, command);
         cy.task('logTask', { data: 'page' + ii }).then(() => {});
+        getProgress(i, ii, command);
         results = results.map((r) => {
           r._searchTerms = currentSearch;
           return r;

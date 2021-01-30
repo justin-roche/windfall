@@ -1,5 +1,43 @@
 @import 'themes/global';
+// @import './variables.scss';
 .input-group-text {
   border: none !important;
-  background-color: none !important;
+  background-color: purple !important;
+}
+table {
+  tr {
+    color: var(--secondary__text);
+    // color: blue;
+    .btn-toggle.active {
+      color: purple !important;
+      background-color: purple !important;
+      input {
+        color: purple !important;
+        background-color: purple !important;
+      }
+      input {
+        color: purple !important;
+        background-color: purple !important;
+      }
+    }
+    .btn-toggle {
+      color: purple !important;
+      background-color: purple !important;
+      input {
+        color: purple !important;
+        background-color: purple !important;
+      }
+      input {
+        color: purple !important;
+        background-color: purple !important;
+      }
+    }
+  }
+}
+.btn__more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  color: var(--secondary__text);
 }
