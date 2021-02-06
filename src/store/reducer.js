@@ -2,22 +2,13 @@ import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import database from 'pages/Database/reducer';
 import execute from 'pages/Execute/reducer';
-import scrape from 'pages/Results/reducer';
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 /* @flow */
-import {
-  ActionType,
-  GlobalStateType,
-} from 'types';
+import { ActionType, GlobalStateType } from 'types';
 
-import {
-  GET_ME,
-  UPDATE_LOADING,
-  UPDATE_THEME,
-  UPDATE_TOKEN,
-} from './action';
-
+import { GET_ME, UPDATE_LOADING, UPDATE_THEME, UPDATE_TOKEN } from './action';
+import scrape from '../client/pages/Results/reducer';
 const initialState: GlobalStateType = {
   isLoading: false,
   accessToken: null,
@@ -33,7 +24,6 @@ const global = (state: any = initialState, action: ActionType) => {
         ...state,
         ...action.payload,
       };
-
       if (!s.accessToken) {
         s = { ...s, user: null };
       }
@@ -59,11 +49,11 @@ const global = (state: any = initialState, action: ActionType) => {
 
 const createReducers = (history: History) =>
   combineReducers({
-    router: connectRouter(history),
     form,
     global,
-    scrape,
     execute,
+    scrape,
+    router: connectRouter(history),
     database,
   });
 

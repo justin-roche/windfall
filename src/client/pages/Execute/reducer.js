@@ -1,9 +1,6 @@
 import { ActionType } from 'types';
 
-import {
-  EXECUTE_SCRAPE,
-  GET_COMMANDS,
-} from './action';
+import { EXECUTE_SCRAPE, GET_COMMANDS } from './action';
 
 const initialState = {
   results: [],
@@ -15,7 +12,7 @@ const initialState = {
   error: null,
 };
 
-const execute = (state: any = initialState, action: ActionType) => {
+const execute = (state = initialState, action) => {
   switch (action.type) {
     case GET_COMMANDS.SUCCESS: {
       return {

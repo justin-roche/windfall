@@ -1,17 +1,18 @@
-import { resolve } from 'path';
-import webpack from 'webpack';
-import ImageminWebpackPlugin from 'imagemin-webpack-plugin';
 import CompressionWebpackPlugin from 'compression-webpack-plugin';
-import WebpackPwaManifest from 'webpack-pwa-manifest';
-import TerserWebpackPlugin from 'terser-webpack-plugin';
+import ImageminWebpackPlugin from 'imagemin-webpack-plugin';
 import OfflinePlugin from 'offline-plugin';
 import OptimizeCSSAssetsWebpackPlugin from 'optimize-css-assets-webpack-plugin';
+import { resolve } from 'path';
+import TerserWebpackPlugin from 'terser-webpack-plugin';
+import webpack from 'webpack';
+import WebpackPwaManifest from 'webpack-pwa-manifest';
+
 import {
   getEntries,
   getOutPut,
   getPlugins,
-  getRules,
   getResolver,
+  getRules,
 } from './helper';
 
 const cwd = process.cwd();

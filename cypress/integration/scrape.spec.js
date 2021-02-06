@@ -1,10 +1,6 @@
-/// <reference types="cypress" />
 import _ from 'lodash';
 
-import { commands } from '../fixtures/commands';
-
 let net = require('net');
-// ipcReport().then((r) => {});
 
 function clickIfExist(element) {
   cy.get('body').then((body) => {
@@ -139,19 +135,18 @@ context('Scrape', () => {
   beforeEach(() => {
     cy.wrap([]).as('results');
   });
-
   it.only('gets search results on multiple pages', function () {
-    let envCommands = Cypress.env('commands');
-    let command = null;
-    command = envCommands ? envCommands[1] : commands[1];
     cy.task('logConnectTask', { data: 0 }).then((r) => {
-      cy.task('logTask', { data: 'starting' }).then((r) => {
-        searchAndPaginate(command);
-        cy.task('logTask', { data: 'finished' }).then((r) => {});
-        //   cy.task('dbTask', { command: 'save', data: results }).then((db) => {
-        //     console.log('db', db, results);
-        //   });
-      });
+      let envCommands = Cypress.env('commands');
+      for (let i = 0; i < envCommands.length; i++) {
+        cy.task('logTask', { data: 'starting' }).then((r) => {
+          searchAndPaginate(envCommands[i]);
+          cy.task('logTask', { data: 'finished' }).then((r) => {});
+          cy.task('dbTask', { command: 'save', data: results }).then((db) => {
+            console.log('db', db, results);
+          });
+        });
+      }
     });
   });
 });

@@ -1,32 +1,12 @@
 @import 'themes/global';
 // @import './variables.scss';
 .input-group-text {
-  border: none !important;
-  background-color: purple !important;
+  //   border: none !important;
+  //   background-color: purple !important;
 }
 table {
   tr {
-    color: var(--secondary__text);
-    // color: blue;
-    .btn-toggle.active {
-      color: purple !important;
-      background-color: purple !important;
-      input {
-        color: purple !important;
-        background-color: purple !important;
-      }
-      input {
-        color: purple !important;
-        background-color: purple !important;
-      }
-    }
-    .btn-toggle {
-      color: purple !important;
-      background-color: purple !important;
-      input {
-        color: purple !important;
-        background-color: purple !important;
-      }
+    .toggle-input {
       input {
         color: purple !important;
         background-color: purple !important;
@@ -34,6 +14,35 @@ table {
     }
   }
 }
+
+// table {
+//   tr {
+//     color: var(--secondary__text);
+//     // color: blue;
+//     .btn-toggle.active {
+//       input {
+//         color: purple !important;
+//         background-color: purple !important;
+//       }
+//       input {
+//         color: purple !important;
+//         background-color: purple !important;
+//       }
+//     }
+//     .btn-toggle {
+//       color: purple !important;
+//       background-color: purple !important;
+//       input {
+//         color: purple !important;
+//         background-color: purple !important;
+//       }
+//       input {
+//         color: purple !important;
+//         background-color: purple !important;
+//       }
+//     }
+//   }
+// }
 .btn__more {
   display: flex;
   justify-content: center;
