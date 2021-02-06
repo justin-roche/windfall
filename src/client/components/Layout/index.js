@@ -1,19 +1,11 @@
 import './styles.scss';
 
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import {
-  Link,
-  NavLink,
-  Redirect,
-  withRouter,
-} from 'react-router-dom';
+import { Link, NavLink, Redirect, withRouter } from 'react-router-dom';
 import {
   RedirectWithoutLastLocation,
   useLastLocation,
@@ -140,7 +132,6 @@ const Child = ({
 
 const Layout = (props) => {
   const {
-    needLogin,
     returnPath = '/',
     location: { pathname },
     global: { accessToken, refreshToken, user },
@@ -166,22 +157,11 @@ const Layout = (props) => {
     window.scrollTo(0, 0);
   }, []);
 
-  if (needLogin && !accessToken) {
-    return <Redirect to='/login' />;
-  }
-
-  if (pathname === '/login' && accessToken) {
-    return (
-      <RedirectWithoutLastLocation to={lastLocation?.pathname || returnPath} />
-    );
-  }
-
   return <Child {...props} />;
 };
 
 Layout.propTypes = {
   title: PropTypes.string,
-  needLogin: PropTypes.bool,
   returnPath: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
