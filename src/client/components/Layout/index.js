@@ -11,7 +11,6 @@ import {
 } from 'react-router-last-location';
 import Switch from 'react-switch';
 import { Collapse } from 'reactstrap';
-import * as globalAction from 'store/action';
 
 const Child = ({ title, children, className = '', showSidebar = true }) => {
   const [collapsed, setCollapsed] = useState(true);
