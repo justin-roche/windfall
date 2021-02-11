@@ -23,7 +23,8 @@
           "utils": "./src/utils",
           "types": "./src/types",
           "models": "./src/models",
-          "store": "./src/store"
+          "store": "./src/store",
+          "state": "./src/client/state"
         }
       }
     ]

@@ -13,27 +13,28 @@ import { loadableReady } from '@loadable/component';
 import Loading from 'components/Loading';
 import configureStore from '../store';
 import routes from '../routes';
+import { AppContextProvider } from './state/store';
 
 const initialState = window.__INITIAL_STATE__;
-
 delete window.__INITIAL_STATE__;
 
 const { store, history } = configureStore({ initialState });
 
 const bootstrap = (routesConfig: Array<Object>) => {
   const renderMethod = module.hot ? render : hydrate;
-
   renderMethod(
     <Suspense fallback={<Loading />}>
-      <AppContainer>
-        <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <LastLocationProvider>
-              <CookiesProvider>{renderRoutes(routesConfig)}</CookiesProvider>
-            </LastLocationProvider>
-          </ConnectedRouter>
-        </Provider>
-      </AppContainer>
+      <AppContextProvider>
+        <AppContainer>
+          <Provider store={store}>
+            <ConnectedRouter history={history}>
+              <LastLocationProvider>
+                <CookiesProvider>{renderRoutes(routesConfig)}</CookiesProvider>
+              </LastLocationProvider>
+            </ConnectedRouter>
+          </Provider>
+        </AppContainer>
+      </AppContextProvider>
     </Suspense>,
     document.getElementById('react-view'),
   );

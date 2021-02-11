@@ -1,14 +1,11 @@
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
-import database from 'pages/Database/reducer';
-import execute from 'pages/Execute/reducer';
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 /* @flow */
 import { ActionType, GlobalStateType } from 'types';
 
 import { GET_ME, UPDATE_LOADING, UPDATE_THEME, UPDATE_TOKEN } from './action';
-import scrape from '../client/pages/Results/reducer';
 const initialState: GlobalStateType = {
   isLoading: false,
   accessToken: null,
@@ -51,10 +48,7 @@ const createReducers = (history: History) =>
   combineReducers({
     form,
     global,
-    execute,
-    scrape,
     router: connectRouter(history),
-    database,
   });
 
 export default createReducers;

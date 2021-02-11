@@ -1,7 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Layout from 'components/Layout';
 import Result from 'components/Result';
@@ -10,30 +7,25 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import { connect } from 'react-redux';
 
-import * as action from './action';
+import { getResultsAction } from '../../state/useApi';
 
-let ScrapeResults = ({
-  scrape,
-  getResultsAction,
-  addResultsAction,
-  clearResultsAction,
-}) => {
+let ScrapeResults = () => {
   const [expanded, setExpanded] = useState(null);
   const [results, setResults] = useState([]);
-  if (scrape && scrape.results.length === 0 && results.length != 0) {
-    setResults([]);
-  }
-  if (scrape && scrape.results.length > 0 && results.length === 0) {
-    let sorted = scrape.results.sort((a, b) => {
+  function sortResults(results) {
+    let sorted = results.sort((a, b) => {
       let _a = moment(a._date, 'DD-MM-YY');
       let _b = moment(b._date, 'DD-MM-YY');
       let x = _a.isAfter(_b) ? -1 : 1;
       return x;
     });
-    setResults(sorted);
+    return sorted;
   }
   useEffect(() => {
-    getResultsAction();
+    getResultsAction().then((results) => {
+      console.log('results', results);
+      setResults(sortResults(results));
+    });
   }, []);
   function setCheckStatus(i) {
     let current = [].concat(results);
@@ -74,16 +66,4 @@ let ScrapeResults = ({
     </Layout>
   );
 };
-
-const mapStateToProps = ({ global, scrape }) => ({
-  global,
-  scrape,
-});
-
-const mapDispatchToProps = {
-  getResultsAction: action.getResultsAction,
-  addResultsAction: action.addResultsAction,
-  clearResultsAction: action.clearResultsAction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ScrapeResults);
+export default ScrapeResults;

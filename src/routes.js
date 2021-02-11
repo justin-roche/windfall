@@ -23,11 +23,6 @@ export default [
         title: 'Scrape Results',
         path: '/results',
       },
-      {
-        component: ScrapeResults,
-        title: 'Scrape Results',
-        path: '/',
-      },
     ],
   },
 ];

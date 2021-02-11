@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Table from 'react-bootstrap/Table';
 import { CheckSquare, Square, PlayCircle } from 'react-bootstrap-icons';
-import { executeScrapeAction } from '../../pages/Execute/action';
+import { executeScrapeAction, onSocketProgress } from '../../state/useApi';
+import { setCommands } from '../../state/actions';
 
 function ExecuteItem({ command }) {
   const [commandState, setCommandState] = useState(command);
-  console.log('command', command);
 
-  const dispatch = useDispatch();
   let handleCheck = function (i) {
-    setCommandState({
-      ...commandState,
-      ...{ expanded: !commandState.expanded },
-    });
+    // setCommandState({
+    //   ...commandState,
+    //   ...{ expanded: !commandState.expanded },
+    // });
   };
+  /*useEffect(() => {});*/
   let handleExecute = function () {
-    dispatch(executeScrapeAction([command]));
+    executeScrapeAction([command]);
   };
   return (
     <tr>

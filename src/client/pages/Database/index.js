@@ -1,28 +1,18 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Layout from 'components/Layout';
 import Result from 'components/Result';
 import Table from 'react-bootstrap/Table';
 import { connect } from 'react-redux';
+import { getDatabaseAction } from '../../state/useApi';
 
-import * as action from './action';
-
-let DatabasePage = ({ database, getDatabaseAction }) => {
-  console.log('rendering db');
+let DatabasePage = () => {
   const [expanded, setExpanded] = useState(null);
   const [data, setData] = useState([]);
-  console.log('data set', database);
-  if (database && database.data.length > 0 && data.length === 0) {
-    setData(database.data);
-  }
   useEffect(() => {
-    if (!data || data.length === 0) {
-      console.log('getting data');
-      getDatabaseAction();
-    }
+    getDatabaseAction().then((results) => {
+      setData(results.results);
+    });
   }, []);
 
   return (
@@ -53,13 +43,4 @@ let DatabasePage = ({ database, getDatabaseAction }) => {
   );
 };
 
-const mapStateToProps = ({ global, database }) => ({
-  global,
-  database,
-});
-
-const mapDispatchToProps = {
-  getDatabaseAction: action.getDatabaseAction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DatabasePage);
+export default DatabasePage;
