@@ -12,14 +12,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
 import { loadableReady } from '@loadable/component';
 import Loading from 'components/Loading';
-import configureStore from '../store';
 import routes from '../routes';
 import { AppContextProvider } from './state/store';
 
 const initialState = window.__INITIAL_STATE__;
 delete window.__INITIAL_STATE__;
-
-const { store, history } = configureStore({ initialState });
 
 const bootstrap = (routesConfig: Array<Object>) => {
   const renderMethod = module.hot ? render : hydrate;
@@ -27,9 +24,7 @@ const bootstrap = (routesConfig: Array<Object>) => {
     <Suspense fallback={<Loading />}>
       <AppContextProvider>
         <AppContainer>
-          <BrowserRouter history={history}>
-            {renderRoutes(routesConfig)}
-          </BrowserRouter>
+          <BrowserRouter>{renderRoutes(routesConfig)}</BrowserRouter>
         </AppContainer>
       </AppContextProvider>
     </Suspense>,

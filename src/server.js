@@ -60,19 +60,19 @@ app.use('/api', serverErrorMiddleware());
 app.use('/api', notFoundErrorMiddleware());
 
 app.get('/*', async (req: Request, res: Response) => {
-  const { store } = configureStore({ url: req.url });
+  //const { store } = configureStore({ url: req.url });
 
   const loadBranchData = (): Promise<any> => {
     const branches = matchRoutes(routes, req.path);
 
     const promises = branches.map(({ route, match }) => {
-      if (route.loadData) {
-        return Promise.all(
-          route
-            .loadData({ params: match.params, getState: store.getState })
-            .map((action) => store.dispatch(action)),
-        );
-      }
+      //if (route.loadData) {
+      //return Promise.all(
+      //route
+      //.loadData({ params: match.params, getState: store.getState })
+      //.map((action) => store.dispatch(action)),
+      //);
+      //}
 
       return Promise.resolve(null);
     });
@@ -117,7 +117,7 @@ app.get('/*', async (req: Request, res: Response) => {
 
         const status = context.status === '404' ? 404 : 200;
 
-        const initialState = store.getState();
+        const initialState = {};
 
         const head = Helmet.renderStatic();
 
