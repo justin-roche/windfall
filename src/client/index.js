@@ -8,6 +8,7 @@ import { renderRoutes } from 'react-router-config';
 import { CookiesProvider } from 'react-cookie';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
 import { loadableReady } from '@loadable/component';
 import Loading from 'components/Loading';
@@ -27,11 +28,9 @@ const bootstrap = (routesConfig: Array<Object>) => {
       <AppContextProvider>
         <AppContainer>
           <Provider store={store}>
-            <ConnectedRouter history={history}>
-              <LastLocationProvider>
-                <CookiesProvider>{renderRoutes(routesConfig)}</CookiesProvider>
-              </LastLocationProvider>
-            </ConnectedRouter>
+            <BrowserRouter history={history}>
+              {renderRoutes(routesConfig)}
+            </BrowserRouter>
           </Provider>
         </AppContainer>
       </AppContextProvider>

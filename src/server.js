@@ -3,10 +3,7 @@ import React from 'react';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
-import Express, {
-  Request,
-  Response,
-} from 'express';
+import Express, { Request, Response } from 'express';
 import helmet from 'helmet';
 /* @flow */
 import { resolve } from 'path';
@@ -14,25 +11,16 @@ import { CookiesProvider } from 'react-cookie';
 import ReactDOMServer from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import { Provider } from 'react-redux';
-import {
-  matchRoutes,
-  renderRoutes,
-} from 'react-router-config';
+import { matchRoutes, renderRoutes } from 'react-router-config';
 import { StaticRouter } from 'react-router-dom';
 import { LastLocationProvider } from 'react-router-last-location';
 import serveFavicon from 'serve-favicon';
 
-import {
-  ChunkExtractor,
-  ChunkExtractorManager,
-} from '@loadable/server';
+import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 
 import api from './api';
 import { isDev } from './config';
-import {
-  notFoundErrorMiddleware,
-  serverErrorMiddleware,
-} from './middlewares';
+import { notFoundErrorMiddleware, serverErrorMiddleware } from './middlewares';
 import routes from './routes';
 import configureStore from './store';
 import renderHtml from './utils/render-html';
@@ -105,11 +93,7 @@ app.get('/*', async (req: Request, res: Response) => {
       <ChunkExtractorManager extractor={extractor}>
         <Provider store={store}>
           <StaticRouter location={req.path} context={context}>
-            <LastLocationProvider>
-              <CookiesProvider cookies={req.universalCookies}>
-                {renderRoutes(routes)}
-              </CookiesProvider>
-            </LastLocationProvider>
+            {renderRoutes(routes)}
           </StaticRouter>
         </Provider>
       </ChunkExtractorManager>
