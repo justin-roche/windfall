@@ -1,19 +1,23 @@
 import cypress from 'cypress';
 import ipc from 'node-ipc';
-
 import { genericError } from '../../models/result.model';
 
 ipc.config.id = 'world';
+ipc.config.socketRoot = './';
 ipc.config.retry = 1;
+console.log(
+  'socket path: ',
+  ipc.config.socketRoot + ipc.config.appspace + ipc.config.id,
+);
 ipc.serve(function () {
   console.log('serving socket');
   ipc.server.on('progress', function (data, socket) {
-    // ipc.log('got a message : '.debug, data);
+    ipc.log('got a message : '.debug, data);
     ipc.log('progress : ', data);
     // ipc.server.emit(socket, 'message', data + ' world!');
   });
   ipc.server.on('message', function (data, socket) {
-    // ipc.log('got a message : '.debug, data);
+    ipc.log('got a message : '.debug, data);
     // ipc.log('got a message : ', data);
     // ipc.server.emit(socket, 'message', data + ' world!');
   });

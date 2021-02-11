@@ -1,5 +1,5 @@
 import _ from 'lodash';
-
+import * as importedCommands from '../fixtures/commands';
 let net = require('net');
 
 function clickIfExist(element) {
@@ -75,6 +75,7 @@ function paginate(command) {
 
 function getFields(command) {
   return cy.get(command.parentSelector).map((el) => {
+    console.log('el', el);
     return _.mapValues(command.fields, (value, key) => {
       if (typeof value === 'object' && value.type == 'link') {
         return getChildLink(el, value.target);
@@ -90,6 +91,8 @@ function executeSearch(command) {
     cy.get(command.clear).type('{selectall}');
     cy.get(command.clear).type('{backspace}');
   }
+  cy.wait(500);
+
   cy.get(command.target).type(command.terms).type('{enter}');
 }
 function getProgress(search, page, command) {
@@ -127,8 +130,9 @@ function searchAndPaginate(command) {
 }
 
 function getCommands() {
-  let rawdata = fs.readFileSync('./cypress/fixtures/commands.json');
-  return JSON.parse(rawdata);
+  //let rawdata = fs.readFileSync('./cypress/fixtures/commands.json');
+  //return JSON.parse(rawdata);
+  return require('../fixtures/commands');
 }
 
 context('Scrape', () => {
@@ -137,7 +141,10 @@ context('Scrape', () => {
   });
   it.only('gets search results on multiple pages', function () {
     cy.task('logConnectTask', { data: 0 }).then((r) => {
-      let envCommands = Cypress.env('commands');
+      //cy.task('readFixtureTask', { data: 0 }).then((fixture) => {
+      let envCommands = Cypress.env('commands') || importedCommands.commands;
+      console.log('commands', envCommands);
+      console.log('imported commands', importedCommands);
       for (let i = 0; i < envCommands.length; i++) {
         cy.task('logTask', { data: 'starting' }).then((r) => {
           searchAndPaginate(envCommands[i]);
@@ -147,6 +154,7 @@ context('Scrape', () => {
           });
         });
       }
+      //});
     });
   });
 });

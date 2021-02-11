@@ -17,13 +17,22 @@
  */
 // `on` is used to hook into various events Cypress emits
 // `config` is the resolved Cypress config
+
+let fs = require('fs');
 const MongoClient = require('mongodb').MongoClient;
 const ipc = require('node-ipc');
+
 module.exports = (on, config) => {
   on('task', {
+    readFixtureTask({ data }) {
+      console.log('dir', __dirname);
+      let rawdata = fs.readFileSync('/fixtures/commands.js');
+      return JSON.parse(rawdata);
+    },
     logConnectTask({ data }) {
       return new Promise((resolve, reject) => {
         ipc.config.id = 'hello';
+        ipc.config.socketRoot = './';
         ipc.config.retry = 3;
         ipc.connectTo('world', function () {
           resolve(true);

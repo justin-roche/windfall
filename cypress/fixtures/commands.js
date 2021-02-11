@@ -7,8 +7,9 @@ export let commands = [
     url: 'https://www.monster.com',
     search: {
       type: 'search',
-      clear: '#text-input-where',
-      target: '#text-input-what',
+      //clear: '#where2',
+      //target: '.job-input',
+      target: '#q2',
       terms: ['coding tutor'],
     },
     pagination: {
@@ -27,7 +28,7 @@ export let commands = [
     },
     resultFields: {
       type: 'getFields',
-      parentSelector: '.result',
+      parentSelector: '#SearchResults>.card-content',
       fields: {
         title: '.jobtitle',
         location: '.location',
