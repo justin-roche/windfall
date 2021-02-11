@@ -91,11 +91,9 @@ app.get('/*', async (req: Request, res: Response) => {
 
     const App = (
       <ChunkExtractorManager extractor={extractor}>
-        <Provider store={store}>
-          <StaticRouter location={req.path} context={context}>
-            {renderRoutes(routes)}
-          </StaticRouter>
-        </Provider>
+        <StaticRouter location={req.path} context={context}>
+          {renderRoutes(routes)}
+        </StaticRouter>
       </ChunkExtractorManager>
     );
 

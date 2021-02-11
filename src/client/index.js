@@ -27,11 +27,9 @@ const bootstrap = (routesConfig: Array<Object>) => {
     <Suspense fallback={<Loading />}>
       <AppContextProvider>
         <AppContainer>
-          <Provider store={store}>
-            <BrowserRouter history={history}>
-              {renderRoutes(routesConfig)}
-            </BrowserRouter>
-          </Provider>
+          <BrowserRouter history={history}>
+            {renderRoutes(routesConfig)}
+          </BrowserRouter>
         </AppContainer>
       </AppContextProvider>
     </Suspense>,

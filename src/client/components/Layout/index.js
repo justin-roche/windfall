@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
 import { Link, NavLink, Redirect, withRouter } from 'react-router-dom';
 import {
   RedirectWithoutLastLocation,
@@ -14,20 +13,7 @@ import Switch from 'react-switch';
 import { Collapse } from 'reactstrap';
 import * as globalAction from 'store/action';
 
-const Child = ({
-  title,
-  children,
-  className = '',
-  showSidebar = true,
-  location: { pathname },
-  global: { theme, accessToken, user },
-  updateThemeAction,
-  updateTokenAction,
-}) => {
-  const onChangeTheme = (checked) => {
-    updateThemeAction(checked ? 'dark' : 'light');
-  };
-
+const Child = ({ title, children, className = '', showSidebar = true }) => {
   const [collapsed, setCollapsed] = useState(true);
 
   const toggleNavbar = () => setCollapsed(!collapsed);
@@ -50,26 +36,6 @@ const Child = ({
                   <Link to='/' className='sidebar__title mr-auto'>
                     <h1>Windfall</h1>
                   </Link>
-
-                  <Switch
-                    checked={theme === 'dark'}
-                    onChange={onChangeTheme}
-                    checkedIcon={
-                      <div className='switch__icon'>
-                        <i className='fa fa-sm fa-sun'></i>
-                      </div>
-                    }
-                    uncheckedIcon={
-                      <div className='switch__icon'>
-                        <i className='fa fa-sm fa-moon fa-flip-horizontal'></i>
-                      </div>
-                    }
-                    onColor='#fbfbff'
-                    offColor='#222725'
-                    onHandleColor='#449dd1'
-                    offHandleColor='#449dd1'
-                    handleDiameter={20}
-                  />
                 </div>
 
                 <p>Making scraping awesome.</p>
@@ -131,51 +97,14 @@ const Child = ({
 };
 
 const Layout = (props) => {
-  const {
-    returnPath = '/',
-    location: { pathname },
-    global: { accessToken, refreshToken, user },
-    fetchTokenAction,
-    renewTokenAction,
-    getMeAction,
-  } = props;
+  const { returnPath = '/' } = props;
 
   const lastLocation = useLastLocation();
 
   useEffect(() => {
-    fetchTokenAction();
-
-    if (refreshToken) {
-      renewTokenAction({ refreshToken });
-    }
-
-    if (!user) {
-      getMeAction();
-    }
-
-    // Reset scroll.
     window.scrollTo(0, 0);
   }, []);
 
   return <Child {...props} />;
 };
-
-Layout.propTypes = {
-  title: PropTypes.string,
-  returnPath: PropTypes.string,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  showSidebar: PropTypes.bool,
-};
-
-const mapStateToProps = ({ global }) => ({ global });
-
-const mapDispatchToProps = {
-  fetchTokenAction: globalAction.fetchTokenAction,
-  renewTokenAction: globalAction.renewTokenAction,
-  getMeAction: globalAction.getMeAction,
-  updateThemeAction: globalAction.updateThemeAction,
-  updateTokenAction: globalAction.updateTokenAction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Layout));
+export default Layout;
