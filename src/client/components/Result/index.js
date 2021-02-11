@@ -3,11 +3,8 @@ import React, { useState } from 'react';
 import { ToggleButton } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
-import { connect } from 'react-redux';
 
-import * as action from './action';
-
-let Result = ({ item, updateScrapeResults }) => {
+let Result = ({ item }) => {
   const [expanded, setExpanded] = useState(false);
   return (
     <Card key={item.originalLink}>
@@ -27,7 +24,7 @@ let Result = ({ item, updateScrapeResults }) => {
             type='checkbox'
             style={{ backgroundColor: 'none' }}
             checked={item.approved}
-            onClick={(e) => updateScrapeResults()}></ToggleButton>
+            onClick={(e) => {}}></ToggleButton>
         </div>
         {item.approved}
       </Card.Header>
@@ -66,13 +63,4 @@ let Result = ({ item, updateScrapeResults }) => {
     </Card>
   );
 };
-
-const mapStateToProps = ({ global }) => ({
-  global,
-});
-
-const mapDispatchToProps = {
-  updateScrapeItems: action.updateScrapeResultsAction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Result);
+export default Result;

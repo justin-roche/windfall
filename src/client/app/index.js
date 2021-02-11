@@ -7,29 +7,16 @@ import { renderRoutes } from 'react-router-config';
 import { ToastContainer } from 'react-toastify';
 import head from 'utils/head';
 
-import Loading from 'components/Loading';
-
-import * as globalAction from 'store/action';
-
-const App = ({ route, global: { isLoading }, updateThemeAction }) => {
-  useEffect(() => {
-    updateThemeAction(localStorage.getItem('theme') || 'light');
-  }, []);
+const App = ({ route }) => {
+  useEffect(() => {}, []);
 
   return (
     <>
       <Helmet {...head} />
       {renderRoutes(route.routes)}
-      {isLoading && <Loading />}
       <ToastContainer />
     </>
   );
 };
-
-const mapStateToProps = ({ global }) => ({ global });
-
-const mapDispatchToProps = {
-  updateThemeAction: globalAction.updateThemeAction,
-};
-
-export default hot(module)(connect(mapStateToProps, mapDispatchToProps)(App));
+//export default hot(module)(App);
+export default App;
