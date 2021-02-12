@@ -22,7 +22,7 @@ import api from './api';
 import { isDev } from './config';
 import { notFoundErrorMiddleware, serverErrorMiddleware } from './middlewares';
 import routes from './routes';
-import configureStore from './store';
+//import configureStore from './store';
 import renderHtml from './utils/render-html';
 
 const app = Express();

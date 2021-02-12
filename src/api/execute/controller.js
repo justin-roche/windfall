@@ -24,12 +24,12 @@ ipc.serve(function () {
 });
 ipc.server.start();
 function executeScrape(req, res) {
-  let body = req.body;
-  console.log('--executing ', body.length, ' commands');
+  let commands = req.body.data;
+  console.log('--executing ', commands.length, ' commands');
   try {
     return cypress
       .run({
-        env: { commands: body },
+        env: { commands, ipc: true },
         quiet: false,
       })
       .then((r) => {
@@ -37,6 +37,8 @@ function executeScrape(req, res) {
           .find()
           .toArray()
           .then((results) => {
+            console.log('sending results', results.length);
+
             return res.json({ data: results });
           });
       });

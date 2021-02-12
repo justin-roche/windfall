@@ -13,69 +13,75 @@ export let commands = [
       terms: ['coding tutor'],
     },
     pagination: {
-      target: '.pagination li',
-      clear: '.popover-x-button-close',
-      pages: 3,
+      type: 'infinite_scroll',
+      target: '#loadMoreJobs',
+      //clear: '.popover-x-button-close',
+      pages: 1,
+    },
+    transformFields: function (result) {
+      //console.log('res', result);
+      let daysAgo = result.date.split(' ')[0].replace('+', '');
+      result._date = moment().subtract(Number(daysAgo), 'd').format('DD-MM-YY');
+      result.hours = result.title.includes('Part-time') ? 'PT' : 'FT';
+      result.remote = result.title.includes('Remote') ? true : false;
     },
     document: {
       source: 'Monster',
-      transformResults: function (result) {
-        let daysAgo = result.date.split(' ')[0].replace('+', '');
-        result._date = moment()
-          .subtract(Number(daysAgo), 'd')
-          .format('DD-MM-YY');
+    },
+    detailFields: {
+      parentSelector: '.title',
+      fields: {
+        salary: '.mux-job-cards',
       },
     },
     resultFields: {
       type: 'getFields',
       parentSelector: '#SearchResults>.card-content',
       fields: {
-        title: '.jobtitle',
         location: '.location',
         company: '.company',
-        salary: '.salaryText',
-        date: '.date',
-        remote: '.remote',
+        title: '.title',
+        date: 'time',
         originalLink: { type: 'link', target: '.title a' },
       },
     },
   },
-  {
-    type: 'searchAndPaginate',
-    name: 'Indeed Code Teaching',
-    url: 'https://www.indeed.com',
-    search: {
-      type: 'search',
-      clear: '#text-input-where',
-      target: '#text-input-what',
-      terms: ['coding tutor', 'code instructor'],
-    },
-    pagination: {
-      target: '.pagination li',
-      clear: '.popover-x-button-close',
-      pages: 3,
-    },
-    document: {
-      source: 'Indeed',
-      transformResults: function (result) {
-        let daysAgo = result.date.split(' ')[0].replace('+', '');
-        result._date = moment()
-          .subtract(Number(daysAgo), 'd')
-          .format('DD-MM-YY');
-      },
-    },
-    resultFields: {
-      type: 'getFields',
-      parentSelector: '.result',
-      fields: {
-        title: '.jobtitle',
-        location: '.location',
-        company: '.company',
-        salary: '.salaryText',
-        date: '.date',
-        remote: '.remote',
-        originalLink: { type: 'link', target: '.title a' },
-      },
-    },
-  },
+  //{
+  //type: 'searchAndPaginate',
+  //name: 'Indeed Code Teaching',
+  //url: 'https://www.indeed.com',
+  //search: {
+  //type: 'search',
+  //clear: '#text-input-where',
+  //target: '#text-input-what',
+  //terms: ['coding tutor', 'code instructor'],
+  //},
+  //pagination: {
+  //target: '.pagination li',
+  //clear: '.popover-x-button-close',
+  //pages: 3,
+  //},
+  //document: {
+  //source: 'Indeed',
+  //transformResults: function (result) {
+  //let daysAgo = result.date.split(' ')[0].replace('+', '');
+  //result._date = moment()
+  //.subtract(Number(daysAgo), 'd')
+  //.format('DD-MM-YY');
+  //},
+  //},
+  //resultFields: {
+  //type: 'getFields',
+  //parentSelector: '.result',
+  //fields: {
+  //title: '.jobtitle',
+  //location: '.location',
+  //company: '.company',
+  //salary: '.salaryText',
+  //date: '.date',
+  //remote: '.remote',
+  //originalLink: { type: 'link', target: '.title a' },
+  //},
+  //},
+  //},
 ];

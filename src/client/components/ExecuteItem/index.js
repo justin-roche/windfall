@@ -29,8 +29,8 @@ function ExecuteItem({ command }) {
       </td>
       <td>
         {command.name}
-        {command._progress ? (
-          <ProgressBar now={command._progress} animated />
+        {command.progress ? (
+          <ProgressBar now={command.progress} animated />
         ) : null}
       </td>
       <td>{command.url}</td>

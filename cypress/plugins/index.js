@@ -31,27 +31,40 @@ module.exports = (on, config) => {
     },
     logConnectTask({ data }) {
       return new Promise((resolve, reject) => {
+        console.log('config', config);
+        //if (config['ipc']) {
+        //resolve(true);
+        //} else {
         ipc.config.id = 'hello';
         ipc.config.socketRoot = './';
         ipc.config.retry = 3;
         ipc.connectTo('world', function () {
           resolve(true);
         });
+        //}
       });
     },
     logTask({ data }) {
       return new Promise((resolve, reject) => {
-        ipc.of.world.emit(
-          'message', //any event or message type your server listens for
-          data,
-        );
-        resolve(true);
+        if (config['ipc']) {
+          resolve(true);
+        } else {
+          ipc.of.world.emit(
+            'message', //any event or message type your server listens for
+            data,
+          );
+          resolve(true);
+        }
       });
     },
     progressTask({ data }) {
       return new Promise((resolve, reject) => {
-        ipc.of.world.emit('progress', data);
-        resolve(true);
+        if (config['ipc']) {
+          resolve(true);
+        } else {
+          ipc.of.world.emit('progress', data);
+          resolve(true);
+        }
       });
     },
     dbTask({ command, data }) {
