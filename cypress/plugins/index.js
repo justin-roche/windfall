@@ -20,8 +20,10 @@
 
 let fs = require('fs');
 const MongoClient = require('mongodb').MongoClient;
+const useIpc = function (config) {
+  return config.env.ipc == true;
+};
 const ipc = require('node-ipc');
-
 module.exports = (on, config) => {
   on('task', {
     readFixtureTask({ data }) {
@@ -32,37 +34,34 @@ module.exports = (on, config) => {
     logConnectTask({ data }) {
       return new Promise((resolve, reject) => {
         console.log('config', config);
-        //if (config['ipc']) {
-        //resolve(true);
-        //} else {
-        ipc.config.id = 'hello';
-        ipc.config.socketRoot = './';
-        ipc.config.retry = 3;
-        ipc.connectTo('world', function () {
+        if (useIpc(config)) {
+          ipc.config.id = 'hello';
+          ipc.config.socketRoot = './';
+          ipc.config.retry = 3;
+          ipc.connectTo('world', function () {
+            resolve(true);
+          });
+        } else {
           resolve(true);
-        });
-        //}
+        }
       });
     },
     logTask({ data }) {
       return new Promise((resolve, reject) => {
-        if (config['ipc']) {
+        if (useIpc(config)) {
+          ipc.of.world.emit('message', data);
           resolve(true);
         } else {
-          ipc.of.world.emit(
-            'message', //any event or message type your server listens for
-            data,
-          );
           resolve(true);
         }
       });
     },
     progressTask({ data }) {
       return new Promise((resolve, reject) => {
-        if (config['ipc']) {
+        if (useIpc(config)) {
+          ipc.of.world.emit('progress', data);
           resolve(true);
         } else {
-          ipc.of.world.emit('progress', data);
           resolve(true);
         }
       });

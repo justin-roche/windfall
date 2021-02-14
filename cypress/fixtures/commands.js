@@ -34,7 +34,7 @@ export let commands = [
         salary: '.mux-job-cards',
       },
     },
-    resultFields: {
+    listFields: {
       type: 'getFields',
       parentSelector: '#SearchResults>.card-content',
       fields: {

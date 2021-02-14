@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-//import ExecuteItem from '../../components/ExecuteItem';
+
 import './styles.scss';
 import { AppContext } from '../../state/store';
 import useApiRequest, {
@@ -13,10 +13,10 @@ import useApiRequest, {
 } from '../../state/useApi';
 import { setCommands, updateCommand } from '../../state/actions';
 import ExecuteItem from '../../components/ExecuteItem';
-
 let Execute = () => {
   const [globalState, dispatch] = useContext(AppContext);
   const commands = globalState ? globalState.commands : [];
+  let count = 0;
   console.log('commands', commands);
   const [busyExecutingState, setBusyExecutingState] = useState(false);
   useEffect(() => {
@@ -26,14 +26,13 @@ let Execute = () => {
     });
     onSocketProgress((data) => {
       console.log('socket prog', data, globalState.commands);
+      console.log('counter', count);
       dispatch(
         updateCommand({ progress: data.percent, name: data.command.name }),
       );
     });
   }, []);
-  //useEffect(() => {
-  //console.log('global updated');
-  //}, [commands]);
+
   return (
     <Layout title='scrape' returnPath='/' showSidebar={true}>
       <Table striped hover>
