@@ -1,40 +1,35 @@
 import SiteObject from './site';
+import Parser from './parser';
 export default class Scrape {
+  definition = {};
+  commandTree = null;
+  commandList = null;
+  commandsRead = 0;
+  progressPercent = 0;
+
   results = [];
-  command = {};
-  currentPage = 0;
-  currentSearchTermIndex = 0;
-  progress = 0;
-
-  constructor(command) {
-    this.command = command;
-    this.pagination = command.pagination;
-    this.search = command.search;
+  constructor(definition) {
+    this.definition = definition;
+    this.pagination = definition.pagination;
+    this.search = definition.search;
   }
 
-  *searches() {
-    for (let i = 0; i < this.search.terms.length; i++) {
-      const term = this.search.terms[i];
-      this.currentSearchTermIndex = i;
-      yield term;
-    }
-  }
-
-  *paginations() {
-    for (let i = 0; i < this.pagination.pages; i++) {
-      this.currentPage = i;
-      yield i;
-    }
+  execute() {
+    let parser = new Parser(this.definition);
+    let tree = parser.generateCommandTree();
+    let commandList = tree.read();
+    let page = new SiteObject();
+    commandList.forEach((command) => {
+      page.run(command);
+    });
+    cy.wait(0).then(() => {
+      console.log('r', tree.getResultNodes());
+    });
   }
 
   updateProgress() {
-    let totalPages = this.search.terms.length * this.pagination.pages;
-    let currentPages =
-      this.pagination.pages * this.currentSearchTermIndex +
-      this.currentPage +
-      1;
-    let p = (currentPages / totalPages) * 100;
-    this.progress = p;
+    this.commandsRead += 1;
+    this.progress = (this.commandsRead / this.commandList.length) * 100;
   }
 
   isValidResult(result) {
@@ -55,7 +50,8 @@ export default class Scrape {
     }
     result._id = this.createResultId(result);
     result.search = this.search.terms[this.currentSearchTermIndex - 1];
-    if (this.command.transformFields) this.command.transformFields(result);
+    if (this.definition.transformFields)
+      this.definition.transformFields(result);
     this.results.push(result);
   }
 

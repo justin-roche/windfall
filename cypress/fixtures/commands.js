@@ -9,13 +9,12 @@ export let commands = [
       type: 'search',
       //clear: '#where2',
       //target: '.job-input',
-      target: '#q2',
-      terms: ['coding tutor'],
+      target: ['#q2', '#keywords2'],
+      terms: ['coding tutor', 'react'],
     },
-    pagination: {
-      type: 'infinite_scroll',
+    revealMore: {
+      type: 'reveal',
       target: '#loadMoreJobs',
-      //clear: '.popover-x-button-close',
       pages: 1,
     },
     transformFields: function (result) {

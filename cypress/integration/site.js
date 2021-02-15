@@ -4,29 +4,56 @@ import {
   getChildText,
   clickIfExist,
 } from './utils';
+const { _, $ } = Cypress;
 export default class SiteObject {
-  command;
-  pagination;
-  search;
-
-  constructor(command) {
-    this.command = command;
-    this.pagination = command.pagination;
-    this.search = command.search;
-  }
-
-  navigate() {
-    cy.visit(this.command.url);
-  }
-
-  searchWithTerms(terms) {
-    let search = this.search;
-    if (search.clear) {
-      cy.get(search.clear).type('{selectall}');
-      cy.get(search.clear).type('{backspace}');
+  run(command) {
+    console.log(
+      'file: site.js ~ line 10 ~ SiteObject ~ run ~ command',
+      command,
+    );
+    switch (command.type) {
+      case 'navigate':
+        this.navigate(command);
+        break;
+      case 'search':
+        this.search(command);
+        break;
+      case 'click':
+        this.click(command);
+        break;
+      case 'listExtract':
+        this.extractListData(command);
+        break;
+      default:
+        break;
     }
-    cy.wait(500);
-    cy.get(search.target).type(terms).type('{enter}');
+  }
+
+  navigate(command) {
+    cy.visit(command.data.url);
+    cy.wait(5000);
+  }
+
+  clearField(command) {
+    cy.get(command.data.target).type('{selectall}');
+    cy.get(command.data.target).type('{backspace}');
+  }
+
+  search(command) {
+    cy.get(command.data.target).should('exist');
+    if (command.data.clear) {
+      this.clearField(command);
+    }
+    cy.get(command.data.target).type(command.data.term);
+    cy.get(command.data.target).type('{enter}');
+  }
+
+  click(command) {
+    cy.get(command.data.target).should('exist');
+    let repeat = command.data.repeat || 1;
+    for (let i = 0; i < repeat; i++) {
+      cy.get(command.data.target).last().click();
+    }
   }
 
   paginate() {
@@ -37,23 +64,31 @@ export default class SiteObject {
     cy.get(this.pagination.target).last().click();
   }
 
-  extractListData() {
-    let command = this.command.listFields;
-    return cy.get(command.parentSelector).map((el) => {
-      let data = _.mapValues(command.fields, (value, key) => {
+  extractListData(command) {
+    let data = command.data;
+    cy.get(data.parentSelector).should('exist');
+    let el = cy.get(data.parentSelector);
+    let q = el.map((el) => {
+      let results = _.mapValues(data.fields, (value, key) => {
         if (typeof value === 'object' && value.type == 'link') {
           return getChildLink(el, value.target);
         } else {
           return getChildText(el, value);
         }
       });
-      return data;
+      command.results.push(results);
     });
+
+    return q;
   }
 
   async extractListDataAsync() {
     return new Promise((resolve, reject) => {
       this.extractListData().then((data) => {
+        console.log(
+          '🚀 ~ file: site.js ~ line 76 ~ SiteObject ~ this.extractListData ~ data',
+          data,
+        );
         resolve(data);
       });
     });

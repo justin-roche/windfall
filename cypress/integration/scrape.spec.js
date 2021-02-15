@@ -26,33 +26,19 @@ function x(params) {
 //}
 //}
 
-function runIterators(command, iterators) {
-  if (iterators.length === 0) {
-    return true;
-  } else {
-    let current = iterators.pop();
-    let counter = current[0]();
-    let count = counter.next();
-    let action = current[1];
-    while (!count.done) {
-      action(count.value);
-      runIterators(command, iterators);
-      count = counter.next();
-    }
-  }
-}
-
 async function runCommand(command) {
   ipcLog('starting');
   let s = new Scrape(command);
-  let o = new SiteObject(command);
-  o.navigate();
-  let search = [s.searches.bind(s), o.searchWithTerms.bind(o)];
-  let extract = [s.searches.bind(s), o.searchWithTerms.bind(o)];
-  runIterators(command, [search]);
-  let d = o.extractListData().then((d) => {
-    console.log('🚀 ~ file: scrape.spec.js ~ line 54 ~ runCommand ~ d', d);
-  });
+  //let o = new SiteObject(command);
+  //s.generateCommandTree();
+  s.execute();
+  //o.navigate();
+  //let search = [s.searches.bind(s), o.searchWithTerms.bind(o)];
+  //let extract = [s.searches.bind(s), o.searchWithTerms.bind(o)];
+  //runIterators(command, [search]);
+  //let d = o.extractListData().then((d) => {
+  //console.log('🚀 ~ file: scrape.spec.js ~ line 54 ~ runCommand ~ d', d);
+  //});
   //o.searchWithTerms(t.value);
   //extractDetailData
   //s.addResults(result);
