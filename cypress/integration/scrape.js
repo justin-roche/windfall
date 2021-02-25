@@ -4,26 +4,65 @@ export default class Scrape {
   definition = {};
   commandTree = null;
   commandList = null;
+  commandParser = null;
+  page = null;
+  //
   commandsRead = 0;
   progressPercent = 0;
 
   results = [];
+
   constructor(definition) {
     this.definition = definition;
     this.pagination = definition.pagination;
     this.search = definition.search;
+    this.page = new SiteObject();
+  }
+
+  setCommandList() {
+    this.commandParser = new Parser(this.definition);
+    this.commandTree = this.commandParser.generateCommandTree();
+    this.commandList = this.commandTree.readNodes();
+  }
+
+  generateDynamicCommandList(node) {
+    let definition = { commands: node.command.commands };
+    let parser = new Parser(definition);
+    let tree = parser.generateDynamicCommandTree(node);
+    return tree.readNodes();
+    //this.runCommandList(node.command.commands);
   }
 
   execute() {
-    let parser = new Parser(this.definition);
-    let tree = parser.generateCommandTree();
-    let commandList = tree.read();
-    let page = new SiteObject();
-    commandList.forEach((command) => {
-      page.run(command);
+    this.setCommandList();
+    this.runCommandList(this.commandList);
+    this.logResults();
+  }
+
+  runCommandList(commandList) {
+    commandList.forEach((node) => {
+      if (node.executed == false) {
+        this.page.run(node.command);
+        cy.wait(0).then(() => {
+          node.executed = true;
+          console.log(
+            'file: scrape.js ~ line 45 ~ Scrape ~ commandList.forEach ~ node',
+            node.command.type,
+          );
+
+          if (node.command.commands) {
+            let dynamicList = this.generateDynamicCommandList(node);
+            this.runCommandList(dynamicList);
+          }
+        });
+      }
     });
+  }
+
+  logResults() {
     cy.wait(0).then(() => {
-      console.log('r', tree.getResultNodes());
+      let r = this.commandTree.getResultData();
+      console.log('r', r);
     });
   }
 
@@ -36,7 +75,7 @@ export default class Scrape {
     return typeof result.company === 'string';
   }
 
-  createResultId(result) {
+  createResult(result) {
     return {
       title: result.title,
       location: result.location,

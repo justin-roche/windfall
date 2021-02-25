@@ -48,7 +48,7 @@ function executeScrape(req, res) {
 }
 export const executeScrapeController = () => async (req, res) => {
   let io = req.app.get('socketio');
-  ipc.server.on('progress', function (data, socket) {
+  server.on('progress', function (data, socket) {
     ipc.log('progress : ', data.percent);
     io.emit('progress', data);
   });

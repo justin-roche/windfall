@@ -1,4 +1,5 @@
 import {
+  $exists,
   getChildLink,
   getInnerHTML,
   getChildText,
@@ -7,53 +8,44 @@ import {
 const { _, $ } = Cypress;
 export default class SiteObject {
   run(command) {
-    console.log(
-      'file: site.js ~ line 10 ~ SiteObject ~ run ~ command',
-      command,
-    );
-    switch (command.type) {
-      case 'navigate':
-        this.navigate(command);
-        break;
-      case 'search':
-        this.search(command);
-        break;
-      case 'click':
-        this.click(command);
-        break;
-      case 'listExtract':
-        this.extractListData(command);
-        break;
-      default:
-        break;
-    }
+    this.handleInterrupt(command, this[command.type].bind(this));
+  }
+
+  handleInterrupt(command, next) {
+    cy.get('body').then(($body) => {
+      if ($body.find(command.interrupt).length) {
+        clickIfExist(command.interrupt);
+      } else {
+        next(command);
+      }
+    });
   }
 
   navigate(command) {
-    cy.visit(command.data.url);
+    cy.visit(command.url);
     cy.wait(5000);
   }
 
   clearField(command) {
-    cy.get(command.data.target).type('{selectall}');
-    cy.get(command.data.target).type('{backspace}');
+    cy.get(command.target).type('{selectall}');
+    cy.get(command.target).type('{backspace}');
   }
 
   search(command) {
-    cy.get(command.data.target).should('exist');
-    if (command.data.clear) {
-      this.clearField(command);
-    }
-    cy.get(command.data.target).type(command.data.term);
-    cy.get(command.data.target).type('{enter}');
+    cy.get(command.target).should('exist');
+    cy.get(command.target).should('be.enabled');
+    this.clearField(command);
+    cy.get(command.target).type(command.term);
+    cy.get(command.target).type('{enter}');
   }
 
   click(command) {
-    cy.get(command.data.target).should('exist');
-    let repeat = command.data.repeat || 1;
+    let repeat = command.repeat || 1;
     for (let i = 0; i < repeat; i++) {
-      cy.get(command.data.target).last().click();
+      cy.get(command.target).should('exist');
+      cy.get(command.target).click();
     }
+    cy.wait(5000);
   }
 
   paginate() {
@@ -64,33 +56,52 @@ export default class SiteObject {
     cy.get(this.pagination.target).last().click();
   }
 
-  extractListData(command) {
-    let data = command.data;
-    cy.get(data.parentSelector).should('exist');
-    let el = cy.get(data.parentSelector);
-    let q = el.map((el) => {
-      let results = _.mapValues(data.fields, (value, key) => {
-        if (typeof value === 'object' && value.type == 'link') {
-          return getChildLink(el, value.target);
-        } else {
-          return getChildText(el, value);
-        }
-      });
-      command.results.push(results);
-    });
+  readFields(command, el) {
+    let results = command.readFields.reduce((acc, field) => {
+      let value = null;
+      if (field.type == 'link') {
+        acc[field.name] = getChildLink(el, field.target);
+      } else {
+        acc[field.name] = getChildText(el, field.target);
+      }
+      return acc;
+    }, {});
 
-    return q;
+    command.results.push({ data: results, element: el });
   }
 
-  async extractListDataAsync() {
-    return new Promise((resolve, reject) => {
-      this.extractListData().then((data) => {
-        console.log(
-          '🚀 ~ file: site.js ~ line 76 ~ SiteObject ~ this.extractListData ~ data',
-          data,
-        );
-        resolve(data);
-      });
+  getListItems(command) {
+    cy.get(command.parentSelector).should('exist');
+    let listElements = cy.get(command.parentSelector).not(command.ignore);
+    listElements.map((listElement) => {
+      this.readFields(command, listElement);
+    });
+  }
+
+  hasDynamicInputElement(command) {
+    if (command.parent == '$') {
+      return true;
+    }
+  }
+
+  getParent(command) {
+    let parent = cy.get('body');
+    if (this.hasDynamicInputElement(command)) {
+      parent = cy.wrap(command.dynamicInput.element);
+    }
+    return parent;
+  }
+
+  getDetailData(command) {
+    let revealElement = this.getParent({
+      ...command.reveal,
+      dynamicInput: command.dynamicInput,
+    }).find(command.reveal.target);
+    revealElement.click();
+    let content = cy.get(command.contentTarget);
+    content.should('exist');
+    content.then((contentElement) => {
+      this.readFields(command, contentElement);
     });
   }
 }

@@ -2,46 +2,57 @@ import moment from 'moment';
 
 export let commands = [
   {
-    type: 'searchAndPaginate',
     name: 'Monster Code Teaching',
-    url: 'https://www.monster.com',
-    search: {
-      type: 'search',
-      //clear: '#where2',
-      //target: '.job-input',
-      target: ['#q2', '#keywords2'],
-      terms: ['coding tutor', 'react'],
-    },
-    revealMore: {
-      type: 'reveal',
-      target: '#loadMoreJobs',
-      pages: 1,
-    },
-    transformFields: function (result) {
-      //console.log('res', result);
-      let daysAgo = result.date.split(' ')[0].replace('+', '');
-      result._date = moment().subtract(Number(daysAgo), 'd').format('DD-MM-YY');
-      result.hours = result.title.includes('Part-time') ? 'PT' : 'FT';
-      result.remote = result.title.includes('Remote') ? true : false;
-    },
+    commands: [
+      {
+        type: 'navigate',
+        url: 'https://www.monster.com',
+      },
+      {
+        type: 'search',
+        target: '#q2,#keywords2',
+        term: ['angular', 'react'],
+        forEach: 'term',
+      },
+      //{
+      //type: 'click',
+      //target: '#loadMoreJobs',
+      //repeat: 1,
+      //},
+      {
+        type: 'getListItems',
+        parentSelector: '#SearchResults>.card-content',
+        ignore: '.apas-ad',
+        readFields: {
+          location: '.location',
+          company: '.company',
+          title: '.title',
+          date: 'time',
+          originalLink: { type: 'link', target: '.title a' },
+        },
+        commands: [
+          {
+            type: 'getDetailData',
+            forEach: '$',
+            reveal: { target: '.title', parent: '$' },
+            contentTarget: '#tab-details',
+            interrupt: '#expired-job-alert button',
+            readFields: {
+              salary: '.mux-job-cards',
+            },
+          },
+        ],
+      },
+    ],
     document: {
       source: 'Monster',
-    },
-    detailFields: {
-      parentSelector: '.title',
-      fields: {
-        salary: '.mux-job-cards',
-      },
-    },
-    listFields: {
-      type: 'getFields',
-      parentSelector: '#SearchResults>.card-content',
-      fields: {
-        location: '.location',
-        company: '.company',
-        title: '.title',
-        date: 'time',
-        originalLink: { type: 'link', target: '.title a' },
+      transformFields: function (result) {
+        let daysAgo = result.date.split(' ')[0].replace('+', '');
+        result._date = moment()
+          .subtract(Number(daysAgo), 'd')
+          .format('DD-MM-YY');
+        result.hours = result.title.includes('Part-time') ? 'PT' : 'FT';
+        result.remote = result.title.includes('Remote') ? true : false;
       },
     },
   },

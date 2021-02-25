@@ -19,7 +19,8 @@
     "storybook": "start-storybook --ci",
     "test": "jest -u",
     "prewp": "npm run clean",
-    "wp": "env-cmd -e production babel-node ./node_modules/.bin/webpack --config src/tools/webpack/webpack.config.js --progress --colors --bail"
+    "wp": "env-cmd -e production babel-node ./node_modules/.bin/webpack --config src/tools/webpack/webpack.config.js --progress --colors --bail",
+    "cypr": "CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open"
   },
   "nodemonConfig": {
     "ignore": [

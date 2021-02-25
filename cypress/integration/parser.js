@@ -1,4 +1,5 @@
 import CommandTree from './tree';
+import * as _ from 'lodash';
 export default class Parser {
   commandTree = null;
   definition = {};
@@ -9,81 +10,86 @@ export default class Parser {
 
   generateCommandTree() {
     let definition = this.definition;
-    let c = this.generateNavigateCommand();
-    this.commandTree = new CommandTree(c);
+    this.commandTree = new CommandTree();
 
-    if (definition.search) {
-      let c = this.generateSearchCommands();
-      this.commandTree.addCommandsToLeafNodes(c);
-    }
-    if (definition.revealMore) {
-      let c = this.generateRevealCommand();
-      this.commandTree.addCommandToLeafNodes(c);
-    }
-    if (definition.listFields) {
-      let c = this.generateListExtractionCommand();
-      this.commandTree.addCommandToLeafNodes(c);
-    }
+    definition.commands.forEach((config) => {
+      if (config.forEach) {
+        let branches = this.createBranchCommands(config);
+        this.commandTree.addCommands(branches);
+      } else {
+        let command = this.generateCommand(config);
+        this.commandTree.addCommand(command);
+      }
+    });
+
     return this.commandTree;
   }
 
-  generateNavigateCommand() {
-    return new Command({
-      type: 'navigate',
-      data: { url: this.definition.url },
-    });
-  }
+  generateDynamicCommandTree(parentNode) {
+    let definition = this.definition;
+    this.commandTree = new CommandTree();
+    this.commandTree.parentNode = parentNode;
+    this.commandTree.setRootNode(parentNode);
 
-  generateSearchCommands() {
-    return this.definition.search.terms.map((term, i) => {
-      let targetDefinition = this.definition.search.target;
-      let target = targetDefinition[0];
-      let clear = false;
-      if (targetDefinition[1] && i > 0) {
-        target = targetDefinition[1];
-        clear = true;
+    parentNode.command.commands.forEach((config) => {
+      if (config.forEach) {
+        if (config.forEach == '$') {
+          let branches = this.createInputBranchCommands(config);
+          this.commandTree.addCommands(branches);
+        }
+      } else {
+        config.dynamicInput = parentNode.command.results;
+        let command = this.generateCommand(config);
+        this.commandTree.addCommand(command);
       }
-      return new Command({
-        type: 'search',
-        data: { target, term, clear },
-      });
+    });
+
+    return this.commandTree;
+  }
+
+  generateCommand(config) {
+    if (config.readFields) {
+      this.configureReadFields(config);
+    }
+    let created = new Command(config);
+    return created;
+  }
+
+  createBranchCommands(config) {
+    let valueList = config[config.forEach];
+    return valueList.map((element) => {
+      let newConfig = _.cloneDeep(config);
+      newConfig[config.forEach] = element;
+      return this.generateCommand(newConfig);
     });
   }
 
-  generateRevealCommand() {
-    return new Command({
-      type: 'click',
-      data: {
-        target: this.definition.revealMore.target,
-        repeat: this.definition.revealMore.pages,
-      },
-    });
-  }
-  generatePaginationCommand() {
-    return new Command({
-      type: 'paginate',
-      data: { target: this.definition.paginate.target },
+  createInputBranchCommands(config) {
+    let resultList = this.commandTree.parentNode.command.results;
+    return resultList.map((element) => {
+      let newConfig = _.cloneDeep(config);
+      newConfig.dynamicInput = element;
+      return this.generateCommand(newConfig);
     });
   }
 
-  generateListExtractionCommand() {
-    return new Command({
-      type: 'listExtract',
-      data: this.definition.listFields,
-      results: [],
+  configureReadFields(config) {
+    config.results = [];
+    config.elements = [];
+    config.readFields = _.map(config.readFields, (value, key) => {
+      if (typeof value === 'object') {
+        return { name: key, type: value.type, target: value.target };
+      }
+      return { name: key, type: 'text', target: value };
     });
+    return config;
   }
 }
 
 class Command {
-  data = null;
-  type = null;
-  results = null;
-  //preAction: null;
-  //postAction: null;
-  constructor({ data, type, results }) {
-    this.data = data;
-    this.type = type;
-    this.results = results;
+  constructor(config) {
+    _.map(config, (value, key) => {
+      this[key] = value;
+    });
   }
 }

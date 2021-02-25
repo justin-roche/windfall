@@ -6,6 +6,16 @@ function clickIfExist(element) {
   });
 }
 
+function $exists(selector) {
+  let element = Cypress.$(selector);
+  if (element.length) {
+    element.click();
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function getChildText(parent, selector) {
   const el = Cypress.$(parent).find(selector);
   let value = 0;
@@ -32,4 +42,4 @@ function getChildLink(parent, selector) {
 //}
 //});
 //}
-export { clickIfExist, getChildText, getChildLink };
+export { clickIfExist, getChildText, getChildLink, $exists };

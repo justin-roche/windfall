@@ -5,12 +5,17 @@ export default class CommandTree {
   resultNodes = [];
 
   constructor(command) {
-    this.rootNode = new CommandNode(command);
-    this.layers.push([this.rootNode]);
+    /*this.rootNode = new CommandNode(command);*/
   }
 
-  read() {
-    return this.rootNode.read();
+  readCommands() {
+    return this.readNodes().map((node) => {
+      return node.command;
+    });
+  }
+
+  readNodes() {
+    return this.rootNode.readNodes();
   }
 
   updateLeafNodes(fn) {
@@ -28,13 +33,24 @@ export default class CommandTree {
     );
   }
 
-  addCommandToLeafNodes(command) {
-    this.updateLeafNodes((acc, leafNode) => {
-      return acc.concat(leafNode.addChildNode(_.cloneDeep(command)));
-    });
+  setRootNode(node) {
+    this.rootNode = node;
+    this.layers.push([this.rootNode]);
   }
 
-  addCommandsToLeafNodes(commands) {
+  addCommand(command) {
+    if (!this.rootNode) {
+      this.setRootNode(new CommandNode(command));
+    } else {
+      this.updateLeafNodes((acc, leafNode) => {
+        return acc.concat(
+          leafNode.addChildNode(_.cloneDeep(command), leafNode),
+        );
+      });
+    }
+  }
+
+  addCommands(commands) {
     this.updateLeafNodes((acc, leafNode) => {
       return acc.concat(leafNode.addChildNodes(commands));
     });
@@ -47,18 +63,28 @@ export default class CommandTree {
   getResultNodes() {
     return this.resultNodes;
   }
+
+  getResultData() {
+    let r = this.getResultNodes();
+    return r.reduce((acc, node) => {
+      return acc.concat(node.command.results);
+    }, []);
+  }
 }
 
 class CommandNode {
   children = [];
   command = null;
 
-  constructor(command) {
+  constructor(command, parentNode, tree) {
     this.command = command;
+    this.parentTree = tree;
+    this.parentNode = parentNode;
+    this.executed = false;
   }
 
-  addChildNode(command) {
-    let child = new CommandNode(command);
+  addChildNode(command, parentNode) {
+    let child = new CommandNode(command, parentNode, this);
     this.children.push(child);
     return child;
   }
@@ -69,6 +95,18 @@ class CommandNode {
     });
   }
 
+  readNodes() {
+    if (this.children.length == 0) {
+      return [this];
+    } else {
+      let r = [this].concat(
+        this.children.reduce((acc, child) => {
+          return acc.concat(child.readNodes());
+        }, []),
+      );
+      return r;
+    }
+  }
   read() {
     let command = this.command;
     if (this.children.length == 0) {
