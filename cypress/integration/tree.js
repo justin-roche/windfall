@@ -23,12 +23,17 @@ export default class CommandTree {
     let newNodes = currentLeafNodes.reduce((acc, leafNode, i) => {
       return fn(acc, leafNode, i);
     }, []);
-
     this.layers.push(newNodes);
+    this.updateResultNodes(newNodes);
+  }
 
+  updateResultNodes(newNodes) {
+    this.resultNodes = this.resultNodes.filter((node, i) => {
+      return node.command.results && node.children.length == 0;
+    });
     this.resultNodes = this.resultNodes.concat(
       newNodes.filter((node) => {
-        return node.command.results;
+        return node.command.results && node.children.length == 0;
       }),
     );
   }
@@ -52,7 +57,9 @@ export default class CommandTree {
 
   addCommands(commands) {
     this.updateLeafNodes((acc, leafNode) => {
-      return acc.concat(leafNode.addChildNodes(commands));
+      return acc.concat(
+        leafNode.addChildNodes(_.cloneDeep(commands), leafNode),
+      );
     });
   }
 
@@ -67,7 +74,11 @@ export default class CommandTree {
   getResultData() {
     let r = this.getResultNodes();
     return r.reduce((acc, node) => {
-      return acc.concat(node.command.results);
+      let results = node.command.results[0].data;
+      if (node.parentData) {
+        results = { ...results, ...node.parentData };
+      }
+      return acc.concat(results);
     }, []);
   }
 }
@@ -83,8 +94,8 @@ class CommandNode {
     this.executed = false;
   }
 
-  addChildNode(command, parentNode) {
-    let child = new CommandNode(command, parentNode, this);
+  addChildNode(command) {
+    let child = new CommandNode(command, this);
     this.children.push(child);
     return child;
   }
@@ -107,6 +118,26 @@ class CommandNode {
       return r;
     }
   }
+
+  handleResultData() {
+    this.results = this.command.results;
+    if (this.command.forEachResult) {
+      let self = this;
+      this.children.forEach((child, i) => {
+        child.parentData = this.results[i].data;
+        let childTarget = child.command.target;
+        if (Array.isArray(childTarget)) {
+          child.command.target = child.command.target.map((element, ii) => {
+            if (element == '$') {
+              return this.results[i].element;
+            }
+            return element;
+          });
+        }
+      });
+    }
+  }
+
   read() {
     let command = this.command;
     if (this.children.length == 0) {

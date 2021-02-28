@@ -73,32 +73,27 @@ export default class SiteObject {
   getListItems(command) {
     cy.get(command.parentSelector).should('exist');
     let listElements = cy.get(command.parentSelector).not(command.ignore);
-    listElements.map((listElement) => {
-      this.readFields(command, listElement);
+    listElements.map((listElement, i) => {
+      if (i <= command.count - 1) {
+        this.readFields(command, listElement);
+      }
     });
   }
 
-  hasDynamicInputElement(command) {
-    if (command.parent == '$') {
-      return true;
+  getTarget(command) {
+    let scope = cy.get('body');
+    if (Array.isArray(command.target)) {
+      scope = cy.wrap(command.target[0]);
+      let targetElement = scope.find(command.target[1]);
+      return targetElement;
     }
-  }
-
-  getParent(command) {
-    let parent = cy.get('body');
-    if (this.hasDynamicInputElement(command)) {
-      parent = cy.wrap(command.dynamicInput.element);
-    }
-    return parent;
+    return scope.find(command.target);
   }
 
   getDetailData(command) {
-    let revealElement = this.getParent({
-      ...command.reveal,
-      dynamicInput: command.dynamicInput,
-    }).find(command.reveal.target);
+    let revealElement = this.getTarget(command);
     revealElement.click();
-    let content = cy.get(command.contentTarget);
+    let content = cy.get(command.contentTarget, { timeout: 10000 });
     content.should('exist');
     content.then((contentElement) => {
       this.readFields(command, contentElement);

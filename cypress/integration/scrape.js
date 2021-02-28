@@ -23,15 +23,34 @@ export default class Scrape {
     this.commandParser = new Parser(this.definition);
     this.commandTree = this.commandParser.generateCommandTree();
     this.commandList = this.commandTree.readNodes();
+    console.log(
+      'file: scrape.js ~ line 26 ~ Scrape ~ setCommandList ~ commandList',
+      this.commandList,
+    );
+    this.printCommandList();
   }
 
-  generateDynamicCommandList(node) {
-    let definition = { commands: node.command.commands };
-    let parser = new Parser(definition);
-    let tree = parser.generateDynamicCommandTree(node);
-    return tree.readNodes();
-    //this.runCommandList(node.command.commands);
+  printCommandList() {
+    let commandList = this.commandList.map((currentItem) => {
+      return currentItem.command.type;
+    });
+    console.log(
+      'file: scrape.js ~ line 37 ~ Scrape ~ printCommandList ~ commandList',
+      commandList,
+    );
   }
+
+  //generateDynamicCommandList(node) {
+  //let definition = { commands: node.command.commands };
+  //let parser = new Parser(definition);
+  //let tree = parser.generateDynamicCommandTree(node);
+  //console.log(
+  //'file: scrape.js ~ line 32 ~ Scrape ~ generateDynamicCommandList ~ tree',
+  //tree,
+  //);
+  //return tree.readNodes();
+  ////this.runCommandList(node.command.commands);
+  //}
 
   execute() {
     this.setCommandList();
@@ -45,15 +64,14 @@ export default class Scrape {
         this.page.run(node.command);
         cy.wait(0).then(() => {
           node.executed = true;
-          console.log(
-            'file: scrape.js ~ line 45 ~ Scrape ~ commandList.forEach ~ node',
-            node.command.type,
-          );
-
-          if (node.command.commands) {
-            let dynamicList = this.generateDynamicCommandList(node);
-            this.runCommandList(dynamicList);
+          if (node.command.results) {
+            node.handleResultData();
           }
+
+          //if (node.command.commands) {
+          //let dynamicList = this.generateDynamicCommandList(node);
+          //this.runCommandList(dynamicList);
+          //}
         });
       }
     });

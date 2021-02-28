@@ -22,7 +22,9 @@ export let commands = [
       {
         type: 'getListItems',
         parentSelector: '#SearchResults>.card-content',
+        $: 'parentSelector',
         ignore: '.apas-ad',
+        count: 2,
         readFields: {
           location: '.location',
           company: '.company',
@@ -30,15 +32,14 @@ export let commands = [
           date: 'time',
           originalLink: { type: 'link', target: '.title a' },
         },
-        commands: [
+        forEachResult: [
           {
             type: 'getDetailData',
-            forEach: '$',
-            reveal: { target: '.title', parent: '$' },
+            target: ['$', '.title'],
             contentTarget: '#tab-details',
             interrupt: '#expired-job-alert button',
             readFields: {
-              salary: '.mux-job-cards',
+              salary: '.mux-job-cards .mux-card',
             },
           },
         ],

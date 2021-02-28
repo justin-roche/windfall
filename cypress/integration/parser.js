@@ -20,6 +20,19 @@ export default class Parser {
         let command = this.generateCommand(config);
         this.commandTree.addCommand(command);
       }
+      if (config.forEachResult) {
+        config.forEachResult.forEach((dependentCommand) => {
+          let branches = this.createBranchCommandsForResults(
+            dependentCommand,
+            config.count,
+          );
+          this.commandTree.addCommands(branches);
+          console.log(
+            'file: parser.js ~ line 22 ~ Parser ~ definition.commands.forEach ~ branches',
+            branches,
+          );
+        });
+      }
     });
 
     return this.commandTree;
@@ -62,6 +75,15 @@ export default class Parser {
       newConfig[config.forEach] = element;
       return this.generateCommand(newConfig);
     });
+  }
+
+  createBranchCommandsForResults(config, expectedResultCount) {
+    let nodes = [];
+    for (let i = 0; i < expectedResultCount; i++) {
+      let newConfig = _.cloneDeep(config);
+      nodes.push(this.generateCommand(newConfig));
+    }
+    return nodes;
   }
 
   createInputBranchCommands(config) {
