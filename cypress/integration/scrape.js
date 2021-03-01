@@ -1,12 +1,12 @@
 import SiteObject from './site';
 import Parser from './parser';
+
 export default class Scrape {
   definition = {};
   commandTree = null;
   commandList = null;
   commandParser = null;
   page = null;
-  //
   commandsRead = 0;
   progressPercent = 0;
 
@@ -23,39 +23,15 @@ export default class Scrape {
     this.commandParser = new Parser(this.definition);
     this.commandTree = this.commandParser.generateCommandTree();
     this.commandList = this.commandTree.readNodes();
-    console.log(
-      'file: scrape.js ~ line 26 ~ Scrape ~ setCommandList ~ commandList',
-      this.commandList,
-    );
     this.printCommandList();
   }
-
-  printCommandList() {
-    let commandList = this.commandList.map((currentItem) => {
-      return currentItem.command.type;
-    });
-    console.log(
-      'file: scrape.js ~ line 37 ~ Scrape ~ printCommandList ~ commandList',
-      commandList,
-    );
-  }
-
-  //generateDynamicCommandList(node) {
-  //let definition = { commands: node.command.commands };
-  //let parser = new Parser(definition);
-  //let tree = parser.generateDynamicCommandTree(node);
-  //console.log(
-  //'file: scrape.js ~ line 32 ~ Scrape ~ generateDynamicCommandList ~ tree',
-  //tree,
-  //);
-  //return tree.readNodes();
-  ////this.runCommandList(node.command.commands);
-  //}
 
   execute() {
     this.setCommandList();
     this.runCommandList(this.commandList);
-    this.logResults();
+    cy.wait(0).then((r) => {
+      this.finalizeResults();
+    });
   }
 
   runCommandList(commandList) {
@@ -65,23 +41,36 @@ export default class Scrape {
         cy.wait(0).then(() => {
           node.executed = true;
           if (node.command.results) {
-            node.handleResultData();
+            // this.updateProgress();
+            node.updateChildrenData();
           }
-
-          //if (node.command.commands) {
-          //let dynamicList = this.generateDynamicCommandList(node);
-          //this.runCommandList(dynamicList);
-          //}
         });
       }
     });
   }
 
   logResults() {
+    let self = this;
+
     cy.wait(0).then(() => {
-      let r = this.commandTree.getResultData();
-      console.log('r', r);
+      console.log('r', results);
     });
+  }
+
+  finalizeResults() {
+    let results = this.commandTree.getResultData();
+    results = results.map((result, i) => {
+      result.source = this.definition.document.source;
+      result._id = this.createResultId(result);
+      if (this.definition.document.transformFields) {
+        this.definition.document.transformFields(result);
+      }
+      return result;
+    });
+    console.log(
+      'file: scrape.js ~ line 84 ~ Scrape ~ results=results.map ~ results',
+      results,
+    );
   }
 
   updateProgress() {
@@ -93,7 +82,7 @@ export default class Scrape {
     return typeof result.company === 'string';
   }
 
-  createResult(result) {
+  createResultId(result) {
     return {
       title: result.title,
       location: result.location,
@@ -101,20 +90,9 @@ export default class Scrape {
     };
   }
 
-  addResult(result) {
-    if (!this.isValidResult(result)) {
-      return;
-    }
-    result._id = this.createResultId(result);
-    result.search = this.search.terms[this.currentSearchTermIndex - 1];
-    if (this.definition.transformFields)
-      this.definition.transformFields(result);
-    this.results.push(result);
-  }
-
-  addResults(results) {
-    results.forEach((result) => {
-      this.addResult(result);
+  printCommandList() {
+    let commandList = this.commandList.map((currentItem) => {
+      return currentItem.command.type;
     });
   }
 }

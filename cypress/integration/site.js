@@ -15,6 +15,7 @@ export default class SiteObject {
     cy.get('body').then(($body) => {
       if ($body.find(command.interrupt).length) {
         clickIfExist(command.interrupt);
+        next(command, true);
       } else {
         next(command);
       }
@@ -62,7 +63,9 @@ export default class SiteObject {
       if (field.type == 'link') {
         acc[field.name] = getChildLink(el, field.target);
       } else {
-        acc[field.name] = getChildText(el, field.target);
+        let result = getChildText(el, field.target);
+        // expect(result).to.not.equal(null);
+        acc[field.name] = result;
       }
       return acc;
     }, {});
@@ -93,10 +96,18 @@ export default class SiteObject {
   getDetailData(command) {
     let revealElement = this.getTarget(command);
     revealElement.click();
-    let content = cy.get(command.contentTarget, { timeout: 10000 });
-    content.should('exist');
-    content.then((contentElement) => {
-      this.readFields(command, contentElement);
+    cy.wait(1000);
+
+    this.handleInterrupt(command, (command, interrupted) => {
+      if (!interrupted) {
+        let content = cy.get(command.contentTarget, { timeout: 10000 });
+        content.should('exist');
+        content.then((contentElement) => {
+          this.readFields(command, contentElement);
+        });
+      } else {
+        command.results = null;
+      }
     });
   }
 }

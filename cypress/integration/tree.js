@@ -74,12 +74,21 @@ export default class CommandTree {
   getResultData() {
     let r = this.getResultNodes();
     return r.reduce((acc, node) => {
-      let results = node.command.results[0].data;
+      return this.getResultDataForNode(acc, node);
+    }, []);
+  }
+
+  getResultDataForNode(acc, node) {
+    let results = node.command.results;
+    if (results && results.length) {
+      results = results[0].data;
       if (node.parentData) {
         results = { ...results, ...node.parentData };
       }
       return acc.concat(results);
-    }, []);
+    } else {
+      return acc;
+    }
   }
 }
 
@@ -89,6 +98,7 @@ class CommandNode {
 
   constructor(command, parentNode, tree) {
     this.command = command;
+    this.command.node = this;
     this.parentTree = tree;
     this.parentNode = parentNode;
     this.executed = false;
@@ -119,7 +129,7 @@ class CommandNode {
     }
   }
 
-  handleResultData() {
+  updateChildrenData() {
     this.results = this.command.results;
     if (this.command.forEachResult) {
       let self = this;

@@ -33,7 +33,7 @@ module.exports = (on, config) => {
     },
     logConnectTask({ data }) {
       return new Promise((resolve, reject) => {
-        console.log('config', config);
+        console.log('*********** config ipc', config.env.ipc);
         if (useIpc(config)) {
           ipc.config.id = 'hello';
           ipc.config.socketRoot = './';

@@ -18,7 +18,7 @@ function $exists(selector) {
 
 function getChildText(parent, selector) {
   const el = Cypress.$(parent).find(selector);
-  let value = 0;
+  let value = null;
   if (el.length) value = el.last().text().trim();
   return value;
 }

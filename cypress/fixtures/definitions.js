@@ -1,6 +1,6 @@
-import moment from 'moment';
+import * as transforms from './transform';
 
-export let commands = [
+export let definitions = [
   {
     name: 'Monster Code Teaching',
     commands: [
@@ -11,14 +11,14 @@ export let commands = [
       {
         type: 'search',
         target: '#q2,#keywords2',
-        term: ['angular', 'react'],
+        term: ['react'],
         forEach: 'term',
       },
-      //{
-      //type: 'click',
-      //target: '#loadMoreJobs',
-      //repeat: 1,
-      //},
+      {
+        type: 'click',
+        target: '#loadMoreJobs',
+        repeat: 1,
+      },
       {
         type: 'getListItems',
         parentSelector: '#SearchResults>.card-content',
@@ -40,6 +40,7 @@ export let commands = [
             interrupt: '#expired-job-alert button',
             readFields: {
               salary: '.mux-job-cards .mux-card',
+              description: '#JobBody',
             },
           },
         ],
@@ -47,14 +48,7 @@ export let commands = [
     ],
     document: {
       source: 'Monster',
-      transformFields: function (result) {
-        let daysAgo = result.date.split(' ')[0].replace('+', '');
-        result._date = moment()
-          .subtract(Number(daysAgo), 'd')
-          .format('DD-MM-YY');
-        result.hours = result.title.includes('Part-time') ? 'PT' : 'FT';
-        result.remote = result.title.includes('Remote') ? true : false;
-      },
+      transformFields: transforms.transformMonsterResults,
     },
   },
   //{
