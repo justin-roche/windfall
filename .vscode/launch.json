@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "pwa-chrome",
+      "request": "attach",
+      "name": "Attach to Cypress Chrome",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "skipFiles": ["cypress_runner.js"]
+    },
+    {
       "name": "Debug",
       "type": "node",
       "request": "attach",
