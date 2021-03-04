@@ -14,12 +14,12 @@ ipc.serve(function () {
   ipc.server.on('progress', function (data, socket) {
     ipc.log('got a message : '.debug, data);
     ipc.log('progress : ', data);
-    // ipc.server.emit(socket, 'message', data + ' world!');
   });
   ipc.server.on('message', function (data, socket) {
     ipc.log('got a message : '.debug, data);
-    // ipc.log('got a message : ', data);
     // ipc.server.emit(socket, 'message', data + ' world!');
+    // ipc.server.emit(socket, 'message', data + ' world!');
+    // ipc.log('got a message : ', data);
   });
 });
 ipc.server.start();

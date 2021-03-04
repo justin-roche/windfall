@@ -1,10 +1,7 @@
 /* @flow */
-import {
-  Request,
-  Response,
-} from 'express';
+import { Request, Response } from 'express';
 
-import { commands } from '../../../cypress/fixtures/commands';
+import { definitions } from '../../../cypress/fixtures/definitions';
 
 export const getCommandsController = () => async (
   req: Request,
@@ -12,7 +9,7 @@ export const getCommandsController = () => async (
 ) => {
   try {
     res.status(200);
-    return res.json({ data: commands });
+    return res.json({ data: definitions });
   } catch (error) {
     return res.json(genericError({ message: error.message }));
   }

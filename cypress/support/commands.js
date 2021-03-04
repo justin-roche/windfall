@@ -24,7 +24,6 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 const _ = require('lodash');
-require('./tab-helpers/commands_tab_helpers');
 
 const commands = ['map'];
 
