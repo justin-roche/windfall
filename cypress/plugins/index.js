@@ -33,12 +33,11 @@ module.exports = (on, config) => {
     },
     logConnectTask({ data }) {
       return new Promise((resolve, reject) => {
-        console.log('*********** config ipc', config.env.ipc);
         if (useIpc(config)) {
-          ipc.config.id = 'hello';
+          ipc.config.id = 'windfall';
           ipc.config.socketRoot = './';
           ipc.config.retry = 3;
-          ipc.connectTo('world', function () {
+          ipc.connectTo('windfall', function () {
             resolve(true);
           });
         } else {
@@ -46,20 +45,20 @@ module.exports = (on, config) => {
         }
       });
     },
-    logTask({ data }) {
-      return new Promise((resolve, reject) => {
-        if (useIpc(config)) {
-          ipc.of.world.emit('message', data);
-          resolve(true);
-        } else {
-          resolve(true);
-        }
-      });
-    },
+    /*logTask({ data }) {*/
+    /*return new Promise((resolve, reject) => {*/
+    /*if (useIpc(config)) {*/
+    /*ipc.of.windfall.emit('message', data);*/
+    /*resolve(true);*/
+    /*} else {*/
+    /*resolve(true);*/
+    /*}*/
+    /*});*/
+    /*},*/
     progressTask({ data }) {
       return new Promise((resolve, reject) => {
         if (useIpc(config)) {
-          ipc.of.world.emit('progress', data);
+          ipc.of.windfall.emit('progress', data);
           resolve(true);
         } else {
           resolve(true);

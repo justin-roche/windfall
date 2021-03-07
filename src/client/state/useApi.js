@@ -7,7 +7,7 @@ import { success, error } from './actions';
 export const request = (endpoint, verb = 'get', params) => {
   try {
     return axios[verb]('/api/' + endpoint, params).then((r) => {
-      console.log('apie response', r);
+      console.log('api response', r);
       return r.data.data;
     });
   } catch (e) {}
@@ -22,7 +22,7 @@ export const executeScrapeAction = (data) => {
 };
 
 export const onSocketProgress = (handler) => {
-  let socket = io.connect('http://192.168.1.186:8081');
+  let socket = io.connect('http://192.168.1.195:8081');
   console.log('socket', socket);
   socket.on('progress', handler);
 };

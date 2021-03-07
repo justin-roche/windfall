@@ -20,6 +20,7 @@
     "test": "jest -u",
     "prewp": "npm run clean",
     "wp": "env-cmd -e production babel-node ./node_modules/.bin/webpack --config src/tools/webpack/webpack.config.js --progress --colors --bail",
+    "mongo": "mongod --dbpath ~/data/db",
     "cypr": "CYPRESS_REMOTE_DEBUGGING_PORT=9222 cypress open"
   },
   "nodemonConfig": {

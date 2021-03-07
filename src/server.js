@@ -28,7 +28,7 @@ import renderHtml from './utils/render-html';
 const app = Express();
 
 app.use([
-  cors({ origin: true, credentials: false }),
+  cors({ origin: false, credentials: false }),
   bodyParser.json({ limit: '50mb' }),
   bodyParser.urlencoded({ extended: true }),
   serveFavicon(resolve(process.cwd(), 'public/assets/favicon.ico')),

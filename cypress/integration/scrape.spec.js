@@ -1,15 +1,15 @@
 import * as importedDefinitions from '../fixtures/definitions';
-import Scrape from './scrape';
-import { dbSave, ipcLog } from './taskUtils';
+import Scrape from '../scraper/scrape';
+import { dbSave, ipcLog } from '../scraper/taskUtils';
 let net = require('net');
 
 function save() {
-  ipcLog('finished');
+  /*ipcLog('finished');*/
   dbSave(s.results);
 }
 
 async function runDefinition(definition) {
-  ipcLog('starting');
+  /*ipcLog('starting');*/
   let s = new Scrape(definition);
   s.execute();
 }

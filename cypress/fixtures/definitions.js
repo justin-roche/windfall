@@ -17,14 +17,14 @@ export let definitions = [
       {
         type: 'click',
         target: '#loadMoreJobs',
-        repeat: 1,
+        repeat: 2,
       },
       {
         type: 'getListItems',
         parentSelector: '#SearchResults>.card-content',
         $: 'parentSelector',
         ignore: '.apas-ad',
-        count: 2,
+        count: 10,
         readFields: {
           location: '.location',
           company: '.company',
