@@ -3,28 +3,33 @@ import React, { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import ExecuteItem from '../../components/ExecuteItem';
-import { setCommands, updateCommand } from '../../state/actions';
+import { setCommands, updateCommand, updateResults } from '../../state/actions';
 import { AppContext } from '../../state/store';
-import { getCommands, onSocketProgress } from '../../state/useApi';
+import {
+  getCommands,
+  onSocketProgress,
+  onSocketEvents,
+} from '../../state/useApi';
 import './styles.scss';
 
 let Execute = () => {
   const [globalState, dispatch] = useContext(AppContext);
   const commands = globalState ? globalState.commands : [];
-  let count = 0;
-  console.log('commands', commands);
   const [busyExecutingState, setBusyExecutingState] = useState(false);
   useEffect(() => {
     getCommands().then((response) => {
       dispatch(setCommands(response));
     });
-    onSocketProgress((data) => {
-      console.log('socket prog', data, globalState.commands);
-      console.log('counter', count);
-      dispatch(
-        updateCommand({ progress: data.percent, name: data.command.name }),
-      );
-    });
+    onSocketEvents(
+      (data) => {
+        console.log('socket prog', data, globalState.commands);
+        dispatch(updateCommand({ progress: data.percent, name: data.name }));
+      },
+      (data) => {
+        console.log('socket results', data, globalState.results);
+        dispatch(updateResults(data.results));
+      },
+    );
   }, []);
 
   return (

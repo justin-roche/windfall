@@ -31,6 +31,16 @@ module.exports = (on, config) => {
         }
       });
     },
+    resultsTask({ data }) {
+      return new Promise((resolve, reject) => {
+        if (useIpc(config)) {
+          ipc.of.windfall.emit('results', data);
+          resolve(true);
+        } else {
+          resolve(true);
+        }
+      });
+    },
   });
   /*logTask({ data }) {*/
   /*return new Promise((resolve, reject) => {*/

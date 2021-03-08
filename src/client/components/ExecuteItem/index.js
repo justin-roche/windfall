@@ -16,7 +16,6 @@ function ExecuteItem({ command }) {
     //   ...{ expanded: !commandState.expanded },
     // });
   };
-  /*useEffect(() => {});*/
   let handleExecute = function () {
     executeScrapeAction([command]);
   };

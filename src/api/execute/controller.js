@@ -6,6 +6,10 @@ function handleSocket(req) {
   server.on('progress', function (data, socket) {
     io.emit('progress', data);
   });
+  server.on('results', function (data, socket) {
+    console.log('file: controller.js ~ line 10 ~ data', data);
+    io.emit('results', data);
+  });
 }
 
 async function executeScrape(req, res) {
@@ -16,10 +20,6 @@ async function executeScrape(req, res) {
       env: { definitions, ipc: true },
       quiet: true,
     });
-    console.log(
-      'file: controller.js ~ line 19 ~ executeScrape ~ result',
-      result,
-    );
     return res.json({ data: true });
   } catch (error) {
     return res.json(genericError({ message: error.message }));

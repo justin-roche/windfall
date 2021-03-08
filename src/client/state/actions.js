@@ -16,3 +16,7 @@ export const setCommands = (data) => {
 export const updateCommand = (data) => {
   return { type: 'UPDATE_COMMAND', payload: data };
 };
+
+export const updateResults = (data) => {
+  return { type: 'UPDATE_RESULTS', payload: data };
+};

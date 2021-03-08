@@ -29,6 +29,9 @@ const reducer = (state, action) => {
     case 'SET_RESULTS': {
       return { ...state, results: action.payload };
     }
+    case 'UPDATE_RESULTS': {
+      return { ...state, results: state.results.concat(action.payload) };
+    }
     default:
       throw new Error();
   }
