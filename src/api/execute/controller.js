@@ -1,36 +1,32 @@
 import cypress from 'cypress';
-
 import server from './ipc-controller';
 
-function executeScrape(req, res) {
-  let commands = req.body.data;
-  console.log('--executing ', commands.length, ' commands');
-  try {
-    return cypress
-      .run({
-        env: { commands, ipc: true },
-        quiet: false,
-      })
-      .then((r) => {
-        req.resultsCollection
-          .find()
-          .toArray()
-          .then((results) => {
-            console.log('sending results', results.length);
+function handleSocket(req) {
+  let io = req.app.get('socketio');
+  server.on('progress', function (data, socket) {
+    io.emit('progress', data);
+  });
+}
 
-            return res.json({ data: results });
-          });
-      });
+async function executeScrape(req, res) {
+  let definitions = req.body.data;
+  console.log('executing ', definitions.length, ' definitions');
+  try {
+    let result = await cypress.run({
+      env: { definitions, ipc: true },
+      quiet: true,
+    });
+    console.log(
+      'file: controller.js ~ line 19 ~ executeScrape ~ result',
+      result,
+    );
+    return res.json({ data: true });
   } catch (error) {
     return res.json(genericError({ message: error.message }));
   }
 }
 
 export const executeScrapeController = () => async (req, res) => {
-  let io = req.app.get('socketio');
-  server.on('progress', function (data, socket) {
-    //ipc.log('progress : ', data.percent);
-    io.emit('progress', data);
-  });
-  return executeScrape(req, res);
+  handleSocket(req);
+  return await executeScrape(req, res);
 };

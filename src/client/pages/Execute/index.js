@@ -1,18 +1,13 @@
 import Layout from 'components/Layout';
-import React, { useEffect, useState } from 'react';
-import { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-
-import './styles.scss';
-import { AppContext } from '../../state/store';
-import useApiRequest, {
-  makeRequest,
-  getCommands,
-  onSocketProgress,
-} from '../../state/useApi';
-import { setCommands, updateCommand } from '../../state/actions';
 import ExecuteItem from '../../components/ExecuteItem';
+import { setCommands, updateCommand } from '../../state/actions';
+import { AppContext } from '../../state/store';
+import { getCommands, onSocketProgress } from '../../state/useApi';
+import './styles.scss';
+
 let Execute = () => {
   const [globalState, dispatch] = useContext(AppContext);
   const commands = globalState ? globalState.commands : [];
@@ -20,7 +15,6 @@ let Execute = () => {
   console.log('commands', commands);
   const [busyExecutingState, setBusyExecutingState] = useState(false);
   useEffect(() => {
-    console.log('running use effect');
     getCommands().then((response) => {
       dispatch(setCommands(response));
     });

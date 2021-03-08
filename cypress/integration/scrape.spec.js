@@ -1,17 +1,9 @@
+import Scrape from '../../scraper/scrape';
 import * as importedDefinitions from '../fixtures/definitions';
-import Scrape from '../scraper/scrape';
-import { dbSave, ipcLog } from '../scraper/taskUtils';
-let net = require('net');
-
-function save() {
-  /*ipcLog('finished');*/
-  dbSave(s.results);
-}
 
 async function runDefinition(definition) {
-  /*ipcLog('starting');*/
-  let s = new Scrape(definition);
-  s.execute();
+  let scrape = new Scrape(definition);
+  scrape.execute();
 }
 
 context('Scrape', () => {
@@ -21,7 +13,7 @@ context('Scrape', () => {
   it.only('gets search results on multiple pages', function () {
     let definitions =
       Cypress.env('definitions') || importedDefinitions.definitions;
-    cy.task('logConnectTask', { data: 0 });
+    cy.task('ipcConnectTask', { data: 0 });
     for (const definition of definitions) {
       runDefinition(definition);
     }

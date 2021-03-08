@@ -14,8 +14,9 @@ export const request = (endpoint, verb = 'get', params) => {
 };
 
 export const getCommands = () => {
-  return request('commands');
+  return request('definitions');
 };
+
 export const executeScrapeAction = (data) => {
   console.log('data', data);
   return request('/execute', 'post', { data });
