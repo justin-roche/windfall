@@ -48,7 +48,7 @@ export let definitions = [
     ],
     document: {
       source: 'Monster',
-      transformFields: transforms.transformMonsterResults,
+      transformFields: 'transformMonsterResults',
     },
   },
   //{

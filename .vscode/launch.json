@@ -21,6 +21,13 @@
       "restart": true,
       "sourceMaps": true,
       "timeout": 60000
+    },
+    {
+      "name": "Launch localhost",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://192.168.1.195:8081/execute",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }

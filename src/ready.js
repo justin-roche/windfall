@@ -11,6 +11,7 @@ import {
 } from './config';
 import useMongo from './mongo';
 import hooks from './tools/hooks';
+import addSocketEvents from './api/execute/socket-controller';
 
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
@@ -34,6 +35,7 @@ global.__SERVER__ = true;
     });
     // var server = http.createServer(app);
     let io = socketIO(boundServer);
+    addSocketEvents(io);
     server.set('socketio', io);
   } catch (error) {
     console.error(error);

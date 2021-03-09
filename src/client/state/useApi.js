@@ -22,10 +22,11 @@ export const executeScrapeAction = (data) => {
   return request('/execute', 'post', { data });
 };
 
-export const onSocketEvents = (progressHandler, resultsHandler) => {
-  let socket = io.connect('http://192.168.1.195:8081');
-  console.log('socket', socket);
+export const onSocketProgress = (progressHandler) => {
   socket.on('progress', progressHandler);
+};
+
+export const onSocketResults = (resultsHandler) => {
   socket.on('results', resultsHandler);
 };
 

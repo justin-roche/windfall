@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
-
 import Layout from 'components/Layout';
 import Result from 'components/Result';
 import moment from 'moment';
+import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import { connect } from 'react-redux';
-
-import { getResultsAction } from '../../state/useApi';
+import { AppContext } from '../../state/store';
 
 let ScrapeResults = () => {
-  const [expanded, setExpanded] = useState(null);
-  const [results, setResults] = useState([]);
+  const [globalState, dispatch] = useContext(AppContext);
+  const results = globalState ? globalState.results : [];
+  const [_results, _setResults] = useState(sortResults(results));
   function sortResults(results) {
     let sorted = results.sort((a, b) => {
       let _a = moment(a._date, 'DD-MM-YY');
@@ -19,14 +17,9 @@ let ScrapeResults = () => {
       let x = _a.isAfter(_b) ? -1 : 1;
       return x;
     });
+    console.log('file: index.js ~ line 20 ~ sorted ~ sorted', sorted);
     return sorted;
   }
-  useEffect(() => {
-    getResultsAction().then((results) => {
-      console.log('results', results);
-      setResults(sortResults(results));
-    });
-  }, []);
   function setCheckStatus(i) {
     let current = [].concat(results);
     current[i].approved = !current[i].approved;
@@ -49,14 +42,14 @@ let ScrapeResults = () => {
         <tbody>
           <tr>
             <td>Indeed</td>
-            <td>{results.length}</td>
+            <td>{_results.length}</td>
             <td></td>
             <td></td>
           </tr>
         </tbody>
       </Table>
-      {results?.map((item, i) => (
-        <Result item={item} key={i}></Result>
+      {_results?.map((item, i) => (
+        <Result item={item} key={item._id}></Result>
         // <div key={i}>{item.originalLink}</div>
       ))}
       <Button onClick={(e) => addResultsAction(results)}>

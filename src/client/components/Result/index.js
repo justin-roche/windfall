@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card';
 import Collapse from 'react-bootstrap/Collapse';
 
 let Result = ({ item }) => {
+  console.log('file: index.js ~ line 8 ~ Result ~ item', item);
   const [expanded, setExpanded] = useState(false);
   return (
     <Card key={item.originalLink}>

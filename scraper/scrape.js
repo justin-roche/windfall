@@ -1,4 +1,5 @@
 import Parser from './parser';
+import * as transforms from './../cypress/fixtures/transform';
 import SiteObject from './page';
 import { ipcSendProgress, ipcSendResults } from './scrapeUtils';
 
@@ -53,7 +54,8 @@ export default class Scrape {
       result.source = this.definition.document.source;
       result._id = this.createResultId(result);
       if (this.definition.document.transformFields) {
-        this.definition.document.transformFields(result);
+        let transformName = this.definition.document.transformFields;
+        transforms[transformName](result);
       }
       return result;
     });
