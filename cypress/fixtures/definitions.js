@@ -2,7 +2,7 @@ import * as transforms from './transform';
 
 export let definitions = [
   {
-    name: 'Monster Code Teaching',
+    name: 'Monster: React Jobs',
     commands: [
       {
         type: 'navigate',
@@ -51,42 +51,47 @@ export let definitions = [
       transformFields: 'transformMonsterResults',
     },
   },
-  //{
-  //type: 'searchAndPaginate',
-  //name: 'Indeed Code Teaching',
-  //url: 'https://www.indeed.com',
-  //search: {
-  //type: 'search',
-  //clear: '#text-input-where',
-  //target: '#text-input-what',
-  //terms: ['coding tutor', 'code instructor'],
-  //},
-  //pagination: {
-  //target: '.pagination li',
-  //clear: '.popover-x-button-close',
-  //pages: 3,
-  //},
-  //document: {
-  //source: 'Indeed',
-  //transformResults: function (result) {
-  //let daysAgo = result.date.split(' ')[0].replace('+', '');
-  //result._date = moment()
-  //.subtract(Number(daysAgo), 'd')
-  //.format('DD-MM-YY');
-  //},
-  //},
-  //resultFields: {
-  //type: 'getFields',
-  //parentSelector: '.result',
-  //fields: {
-  //title: '.jobtitle',
-  //location: '.location',
-  //company: '.company',
-  //salary: '.salaryText',
-  //date: '.date',
-  //remote: '.remote',
-  //originalLink: { type: 'link', target: '.title a' },
-  //},
-  //},
-  //},
+  {
+    type: 'searchAndPaginate',
+    name: 'Indeed: React/Redux Jobs',
+    commands: [
+      {
+        type: 'navigate',
+        url: 'https://www.indeed.com',
+      },
+      {
+        type: 'search',
+        clear: '#text-input-where',
+        target: '#text-input-what',
+        term: ['react', 'redux'],
+        forEach: 'term',
+      },
+      {
+        type: 'paginate',
+        target: '.pagination li',
+        clear: '.popover-x-button-close',
+        pages: 3,
+      },
+      {
+        type: 'getListItems',
+        parentSelector: '.result',
+        $: 'parentSelector',
+        ignore: '.apas-ad',
+        count: 10,
+        readFields: {
+          title: '.jobtitle',
+          location: '.location',
+          company: '.company',
+          salary: '.salaryText',
+          date: '.date',
+          remote: '.remote',
+          originalLink: { type: 'link', target: '.title a' },
+        },
+      },
+    ],
+    document: {
+      source: 'Indeed',
+      transformFields: 'transformIndeedResults',
+    },
+  },
 ];

@@ -45,7 +45,7 @@ export default class CommandTree {
     this.layers.push([this.rootNode]);
   }
 
-  addCommand(command) {
+  addNormalLayer(command) {
     if (!this.rootNode) {
       this.setRootNode(new CommandNode(command));
     } else {
@@ -57,7 +57,7 @@ export default class CommandTree {
     }
   }
 
-  addCommands(commands) {
+  addBranchingLayer(commands) {
     this.updateLeafNodes((acc, leafNode) => {
       return acc.concat(
         leafNode.addChildNodes(_.cloneDeep(commands), leafNode),
