@@ -3,6 +3,7 @@
 Windfall is an in-progress, proof-of-concept web scraper utilizing Cypress.js. It aims to be reusable and generic, while being versatile enough to carry out most common scraping tasks. It is called by an Express server and communicates its results and progress using node-ipc. A React front end is included allowing the user to run one scrape job or multiple jobs based on their selections, to see the results of the scrape, and approve results individually or as a batch for saving to a Mongo database.
 
 ### **How it works**
+ sudo mongod --dbpath ~/data/db
 
 Scrape definitions located in the fixtures folder provide the list of definitions for the scrape jobs.
 

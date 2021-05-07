@@ -1,4 +1,3 @@
-/* @flow */
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -8,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import head from 'utils/head';
 
 const App = ({ route }) => {
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <>
