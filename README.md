@@ -71,7 +71,7 @@ The scrape is accomplished in three steps:
 
 ### **Why use a tree? Why not use loops or generators?**
 
-Scrapers have to handle arbitrary loops. I thought about generators, but trees allow for easier debugging of the core feature, the generic API, and allow for more powerful reads of the eventual results, as hierarchical relationships between commands are retained through the lifetime of the scrape job. Because we are doing scraping, not crawling, there is limited need for generating new comand queues on the fly. The tree representation and the command list could (eventually) generated only once, with only the execution of the command list being run each time the scrape is executed. So the tree operations could have minimal performance impacts while preserving rich data relationships between the commands.
+Scrapers have to handle arbitrary loops. I thought about generators, but trees allow for easier debugging of the core feature, the generic API, and allow for more powerful reads of the eventual results, as hierarchical relationships between commands are retained through the lifetime of the scrape job. Because we are doing scraping, not crawling, there is limited need for generating new comand queues on the fly. The tree representation and the command list could (eventually) be generated only once, with only the execution of the command list being run each time the scrape is executed. So the tree operations could have minimal performance impacts while preserving rich data relationships between the commands.
 
 ## License
 
